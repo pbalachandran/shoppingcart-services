@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {ShoppingCartServicesApplication.class})
-public class CatalogControllerAcceptanceTest {
+public class ProductCategoryControllerAcceptanceTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -30,6 +30,6 @@ public class CatalogControllerAcceptanceTest {
         mockMvc.perform(get("/api/catalog/categories")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.readFixture("/responses/product-categories.json")));
+                .andExpect(content().json(TestUtils.readFixture("responses/product-categories.json")));
     }
 }

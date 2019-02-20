@@ -1,11 +1,11 @@
 package com.corelogic.sc.entities;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,11 +24,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product_category")
-public class ProductCategory implements Serializable {
+@Table(name = "cart")
+public class Cart implements Serializable {
     @Id
-    @Column(name = "product_category_name")
-    private String productCategoryName;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_id")
+    private Long cartId;
+
+    @Column(name = "cart_name")
+    private String cartName;
 
     @Column(name = "description")
     private String description;
@@ -37,7 +41,7 @@ public class ProductCategory implements Serializable {
     private LocalDateTime createdDate;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "productCategory",
+    @OneToMany(mappedBy = "cart",
             cascade = CascadeType.ALL)
-    private List<Product> products;
+    private List<Item> items;
 }
