@@ -1,7 +1,9 @@
 package com.corelogic.sc.services;
 
 import com.corelogic.sc.entities.ProductCategory;
+import com.corelogic.sc.requests.ProductCategoryRequest;
 import com.corelogic.sc.responses.ProductCategoryResponse;
+import com.corelogic.sc.responses.ProductResponse;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,7 +34,6 @@ public class ProductCategoryServiceTest {
 
     @Test
     public void getProductCategories_returnsAllProductCategories() {
-
         when(mockProductCategoryRepository.findAll()).thenReturn(Arrays.asList(
                 ProductCategory
                         .builder()
@@ -61,5 +63,53 @@ public class ProductCategoryServiceTest {
         List<ProductCategoryResponse> actual = subject.getProductCategories();
 
         assertEquals(productCategoryResponses, actual);
+    }
+
+    @Test
+    public void getProductCategory_whenRetrievedByProductCategoryName_returnsProductCategory() {
+        when(mockProductCategoryRepository.findByProductCategoryName("Electronics")).thenReturn(
+                ProductCategory
+                        .builder()
+                        .productCategoryName("Electronics")
+                        .description("Electronics & Computer Equipment")
+                        .build());
+
+        ProductCategoryResponse productCategoryResponse  = ProductCategoryResponse
+                .builder()
+                .productCategoryName("Electronics")
+                .description("Electronics & Computer Equipment")
+                .build();
+
+        ProductCategoryResponse actual = subject.getProductCategory("Electronics");
+
+        assertEquals(productCategoryResponse, actual);
+    }
+
+    @Test
+    public void addProductCategory_addsProductCategory() {
+        ProductCategory productCategory = ProductCategory
+                .builder()
+                .productCategoryName("Stationary Supplies")
+                .description("Stationary & Paper")
+                .build();
+        when(mockProductCategoryRepository.save(ProductCategory
+                .builder()
+                .productCategoryName("Stationary Supplies")
+                .description("Stationary & Paper")
+                .build())).thenReturn(productCategory);
+
+        ProductCategoryResponse productCategoryResponse = ProductCategoryResponse
+                .builder()
+                .productCategoryName("Stationary Supplies")
+                .description("Stationary & Paper")
+                .build();
+
+        ProductCategoryResponse actual = subject.addProductCategory(ProductCategoryRequest
+                .builder()
+                .productCategoryName("Stationary Supplies")
+                .description("Stationary & Paper")
+                .build());
+
+        assertEquals(productCategoryResponse, actual);
     }
 }

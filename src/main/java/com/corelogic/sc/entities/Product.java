@@ -58,8 +58,8 @@ public class Product implements Serializable {
     @JoinColumn(name = "product_category_name", nullable = false)
     private ProductCategory productCategory;
 
-//    @JsonBackReference
-//    @OneToOne(mappedBy = "product",
-//            cascade = CascadeType.ALL)
-//    private Item item;
+    @JsonBackReference
+    @OneToOne(mappedBy = "product",
+            cascade = CascadeType.ALL)
+    private Item item;
 }
