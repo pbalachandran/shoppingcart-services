@@ -22,7 +22,12 @@ public class CatalogController {
         return null;
     }
 
-    @GetMapping(value = "categories/{categoryName}")
+    @GetMapping(value = "category/{categoryName}")
+    public ResponseEntity<ProductCategoryResponse> category(@PathVariable("categoryName") String categoryName) {
+        return null;
+    }
+
+    @GetMapping(value = "categories/{categoryName}/products")
     public ResponseEntity<List<ProductResponse>> products(@PathVariable("categoryName") String categoryName) {
         return null;
     }
