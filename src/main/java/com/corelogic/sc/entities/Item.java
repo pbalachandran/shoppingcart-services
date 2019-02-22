@@ -38,7 +38,7 @@ public class Item implements Serializable {
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", nullable = false)
+    @JoinColumn(name = "cart_name", nullable = false)
     private Cart cart;
 
     @JsonManagedReference

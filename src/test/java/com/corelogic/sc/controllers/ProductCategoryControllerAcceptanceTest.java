@@ -68,4 +68,12 @@ public class ProductCategoryControllerAcceptanceTest {
         ProductCategory savedProductCategory = productCategoryRepository.findByProductCategoryName("Stationary Supplies");
         productCategoryRepository.delete(savedProductCategory);
     }
+
+    @Test
+    public void productCategory_retrievesProductCategoryByInvalidProductCategoryName_throwsProductCategoryException() throws Exception {
+        mockMvc.perform(get("/api/productCatalog/productCategory/InvalidProductCategory")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(TestUtils.readFixture("responses/product-category-notfound.json")));
+    }
 }

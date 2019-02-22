@@ -36,7 +36,7 @@ public class ProductControllerAcceptanceTest {
 
     @Test
     public void products_retrievesProductsByCategoryName() throws Exception {
-        mockMvc.perform(get("/api/product/products/Electronics")
+        mockMvc.perform(get("/api/products/Electronics")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.readFixture("responses/products-by-category.json")));
@@ -44,7 +44,7 @@ public class ProductControllerAcceptanceTest {
 
     @Test
     public void product_retrieveProductBySkuNumber() throws Exception {
-        mockMvc.perform(get("/api/product/product/IPHONE8S")
+        mockMvc.perform(get("/api/products/product/IPHONE8S")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.readFixture("responses/product-by-sku.json")));
@@ -52,7 +52,7 @@ public class ProductControllerAcceptanceTest {
 
     @Test
     public void product_retrieveProductByInvalidSkuNumber_throwsProductNotFoundException() throws Exception {
-        mockMvc.perform(get("/api/product/product/INVALIDSKU"))
+        mockMvc.perform(get("/api/products/product/INVALIDSKU"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(TestUtils.readFixture("responses/product-sku-notfound.json"), true));
@@ -71,7 +71,7 @@ public class ProductControllerAcceptanceTest {
                         .productCategoryName("Electronics")
                         .build());
 
-        mockMvc.perform(post("/api/product/product")
+        mockMvc.perform(post("/api/products/product")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonPayload))

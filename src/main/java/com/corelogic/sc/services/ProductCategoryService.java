@@ -1,6 +1,7 @@
 package com.corelogic.sc.services;
 
 import com.corelogic.sc.entities.ProductCategory;
+import com.corelogic.sc.exceptions.ProductCategoryNotFoundException;
 import com.corelogic.sc.requests.AddProductCategoryRequest;
 import com.corelogic.sc.responses.ProductCategoryResponse;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
@@ -32,8 +33,12 @@ public class ProductCategoryService {
                         .build()).collect(Collectors.toList());
     }
 
-    public ProductCategoryResponse getProductCategory(String productCategoryName) {
+    public ProductCategoryResponse getProductCategory(String productCategoryName) throws ProductCategoryNotFoundException {
         ProductCategory productCategory = productCategoryRepository.findByProductCategoryName(productCategoryName);
+
+        if(productCategory == null) {
+            throw new ProductCategoryNotFoundException("Product Category " + productCategoryName + " was not found");
+        }
         return ProductCategoryResponse
                 .builder()
                 .productCategoryName(productCategory.getProductCategoryName())

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private ProductService productService;
@@ -33,7 +33,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping(value = "/products/{productCategoryName}")
+    @GetMapping(value = "/{productCategoryName}")
     public ResponseEntity<List<ProductResponse>> products(@PathVariable("productCategoryName") String productCategoryName) {
         List<ProductResponse> productResponses = productService.getProducts(productCategoryName);
         return ResponseEntity.ok(productResponses);

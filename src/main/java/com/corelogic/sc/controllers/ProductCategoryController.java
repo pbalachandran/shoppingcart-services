@@ -1,11 +1,15 @@
 package com.corelogic.sc.controllers;
 
 
+import com.corelogic.sc.exceptions.ProductCategoryNotFoundException;
 import com.corelogic.sc.requests.AddProductCategoryRequest;
+import com.corelogic.sc.responses.ProductCategoryExceptionResponse;
 import com.corelogic.sc.responses.ProductCategoryResponse;
 import com.corelogic.sc.services.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,7 +37,8 @@ public class ProductCategoryController {
     }
 
     @GetMapping(value = "/productCategory/{productCategoryName}")
-    public ResponseEntity<ProductCategoryResponse> productCategory(@PathVariable("productCategoryName") String productCategoryName) {
+    public ResponseEntity<ProductCategoryResponse> productCategory(@PathVariable("productCategoryName") String productCategoryName)
+            throws ProductCategoryNotFoundException {
         ProductCategoryResponse productCategoryResponse = productCategoryService.getProductCategory(productCategoryName);
         return ResponseEntity.ok(productCategoryResponse);
     }
@@ -42,5 +47,10 @@ public class ProductCategoryController {
     public ResponseEntity<ProductCategoryResponse> productCategory(@RequestBody AddProductCategoryRequest productCategoryRequest) {
         ProductCategoryResponse productCategoryResponse = productCategoryService.addProductCategory(productCategoryRequest);
         return ResponseEntity.ok(productCategoryResponse);
+    }
+
+    @ExceptionHandler(ProductCategoryNotFoundException.class)
+    public ResponseEntity<ProductCategoryExceptionResponse> productCategoryNotFound(ProductCategoryNotFoundException exception) {
+        return new ResponseEntity<>(new ProductCategoryExceptionResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

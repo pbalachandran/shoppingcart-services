@@ -1,6 +1,7 @@
 package com.corelogic.sc.services;
 
 import com.corelogic.sc.entities.ProductCategory;
+import com.corelogic.sc.exceptions.ProductCategoryNotFoundException;
 import com.corelogic.sc.requests.AddProductCategoryRequest;
 import com.corelogic.sc.responses.ProductCategoryResponse;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 
@@ -66,7 +68,7 @@ public class ProductCategoryServiceTest {
     }
 
     @Test
-    public void getProductCategory_whenRetrievedByProductCategoryName_returnsProductCategory() {
+    public void getProductCategory_whenRetrievedByProductCategoryName_returnsProductCategory() throws Exception {
         when(mockProductCategoryRepository.findByProductCategoryName("Electronics")).thenReturn(
                 ProductCategory
                         .builder()
@@ -108,5 +110,15 @@ public class ProductCategoryServiceTest {
                 .build());
 
         assertEquals(productCategoryResponse, actual);
+    }
+
+    @Test(expected = ProductCategoryNotFoundException.class)
+    public void getProductCategory_doesNotFindProductCatgoryByThatProductCategoryName_throwsProductCategoryNotFoundException() throws Exception {
+        when(mockProductCategoryRepository
+                .findByProductCategoryName("InvalidProductCategoryName"))
+                .thenReturn(null);
+
+        subject.getProductCategory("InvalidProductCategoryName");
+        verify(mockProductCategoryRepository).findByProductCategoryName("InvalidProductCategoryName");
     }
 }

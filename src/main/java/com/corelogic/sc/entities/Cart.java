@@ -7,8 +7,6 @@ import lombok.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,10 +23,6 @@ import java.util.List;
 @ToString(exclude = {"items", "createdDate"})
 public class Cart implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id")
-    private Long cartId;
-
     @Column(name = "cart_name")
     private String cartName;
 
