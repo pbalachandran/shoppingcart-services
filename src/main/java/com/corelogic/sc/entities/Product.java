@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,12 +30,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "product")
+@ToString(exclude = {"productCategory", "createdDate"})
 public class Product implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private Long productId;
-
     @Column(name = "sku_number")
     private String skuNumber;
 
@@ -54,7 +52,7 @@ public class Product implements Serializable {
     private LocalDateTime createdDate;
 
     @JsonManagedReference
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_category_name", nullable = false)
     private ProductCategory productCategory;
 

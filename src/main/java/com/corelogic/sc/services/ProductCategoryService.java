@@ -1,12 +1,13 @@
 package com.corelogic.sc.services;
 
 import com.corelogic.sc.entities.ProductCategory;
-import com.corelogic.sc.requests.ProductCategoryRequest;
+import com.corelogic.sc.requests.AddProductCategoryRequest;
 import com.corelogic.sc.responses.ProductCategoryResponse;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,6 @@ public class ProductCategoryService {
 
     public List<ProductCategoryResponse> getProductCategories() {
         List<ProductCategory> productCategories = productCategoryRepository.findAll();
-
         return productCategories.stream().map(productCategory ->
                 ProductCategoryResponse
                         .builder()
@@ -41,11 +41,12 @@ public class ProductCategoryService {
                 .build();
     }
 
-    public ProductCategoryResponse addProductCategory(ProductCategoryRequest productCategoryRequest) {
+    public ProductCategoryResponse addProductCategory(AddProductCategoryRequest productCategoryRequest) {
         ProductCategory productCategory = productCategoryRepository.save(ProductCategory
                 .builder()
                 .productCategoryName(productCategoryRequest.getProductCategoryName())
                 .description(productCategoryRequest.getDescription())
+                .createdDate(LocalDateTime.now())
                 .build());
         return ProductCategoryResponse
                 .builder()

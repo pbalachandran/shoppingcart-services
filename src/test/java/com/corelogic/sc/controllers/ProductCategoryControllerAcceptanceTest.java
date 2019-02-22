@@ -1,7 +1,9 @@
 package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.ShoppingCartServicesApplication;
-import com.corelogic.sc.requests.ProductCategoryRequest;
+import com.corelogic.sc.entities.ProductCategory;
+import com.corelogic.sc.requests.AddProductCategoryRequest;
+import com.corelogic.sc.respositories.ProductCategoryRepository;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -28,6 +30,9 @@ public class ProductCategoryControllerAcceptanceTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
+
     @Test
     public void productCategories_retrievesAllCategories() throws Exception {
         mockMvc.perform(get("/api/productCatalog/productCategories")
@@ -47,7 +52,7 @@ public class ProductCategoryControllerAcceptanceTest {
     @Test
     public void productCategory_createsNewProductCategory() throws Exception {
         String jsonPayload =
-                new ObjectMapper().writeValueAsString(ProductCategoryRequest
+                new ObjectMapper().writeValueAsString(AddProductCategoryRequest
                         .builder()
                         .productCategoryName("Stationary Supplies")
                         .description("Stationary & Paper")
@@ -59,5 +64,8 @@ public class ProductCategoryControllerAcceptanceTest {
                 .content(jsonPayload))
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.readFixture("responses/product-category-add.json")));
+
+        ProductCategory savedProductCategory = productCategoryRepository.findByProductCategoryName("Stationary Supplies");
+        productCategoryRepository.delete(savedProductCategory);
     }
 }

@@ -8,7 +8,6 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class ProductResponse {
-    private Long productId;
     private String skuNumber;
     private String productName;
     private String description;

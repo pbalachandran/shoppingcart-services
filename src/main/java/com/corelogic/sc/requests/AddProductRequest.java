@@ -1,5 +1,6 @@
 package com.corelogic.sc.requests;
 
+import com.corelogic.sc.entities.ProductCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,7 @@ import javax.persistence.Id;
 @Data
 @Builder
 @AllArgsConstructor
-public class ProductRequest {
+public class AddProductRequest {
 
     private String skuNumber;
 
@@ -23,4 +24,6 @@ public class ProductRequest {
     private Integer inventoryCount;
 
     private Double price;
+
+    private String productCategoryName;
 }

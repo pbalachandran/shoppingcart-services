@@ -1,9 +1,8 @@
 package com.corelogic.sc.services;
 
 import com.corelogic.sc.entities.ProductCategory;
-import com.corelogic.sc.requests.ProductCategoryRequest;
+import com.corelogic.sc.requests.AddProductCategoryRequest;
 import com.corelogic.sc.responses.ProductCategoryResponse;
-import com.corelogic.sc.responses.ProductResponse;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,13 +10,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProductCategoryServiceTest {
@@ -91,12 +91,9 @@ public class ProductCategoryServiceTest {
                 .builder()
                 .productCategoryName("Stationary Supplies")
                 .description("Stationary & Paper")
+                .createdDate(LocalDateTime.now())
                 .build();
-        when(mockProductCategoryRepository.save(ProductCategory
-                .builder()
-                .productCategoryName("Stationary Supplies")
-                .description("Stationary & Paper")
-                .build())).thenReturn(productCategory);
+        when(mockProductCategoryRepository.save(any(ProductCategory.class))).thenReturn(productCategory);
 
         ProductCategoryResponse productCategoryResponse = ProductCategoryResponse
                 .builder()
@@ -104,7 +101,7 @@ public class ProductCategoryServiceTest {
                 .description("Stationary & Paper")
                 .build();
 
-        ProductCategoryResponse actual = subject.addProductCategory(ProductCategoryRequest
+        ProductCategoryResponse actual = subject.addProductCategory(AddProductCategoryRequest
                 .builder()
                 .productCategoryName("Stationary Supplies")
                 .description("Stationary & Paper")

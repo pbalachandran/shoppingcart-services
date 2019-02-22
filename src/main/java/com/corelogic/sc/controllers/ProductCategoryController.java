@@ -1,10 +1,8 @@
 package com.corelogic.sc.controllers;
 
 
-import com.corelogic.sc.requests.ProductCategoryRequest;
-import com.corelogic.sc.requests.ProductRequest;
+import com.corelogic.sc.requests.AddProductCategoryRequest;
 import com.corelogic.sc.responses.ProductCategoryResponse;
-import com.corelogic.sc.responses.ProductResponse;
 import com.corelogic.sc.services.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +28,7 @@ public class ProductCategoryController {
 
     @GetMapping(value = "/productCategories")
     public ResponseEntity<List<ProductCategoryResponse>> productCategories() {
-        List<ProductCategoryResponse> productCategoryResponses =
-                productCategoryService.getProductCategories();
+        List<ProductCategoryResponse> productCategoryResponses = productCategoryService.getProductCategories();
         return ResponseEntity.ok(productCategoryResponses);
     }
 
@@ -42,23 +39,8 @@ public class ProductCategoryController {
     }
 
     @PostMapping(value = "/productCategory")
-    public ResponseEntity<ProductCategoryResponse> productCategory(@RequestBody ProductCategoryRequest productCategoryRequest) {
+    public ResponseEntity<ProductCategoryResponse> productCategory(@RequestBody AddProductCategoryRequest productCategoryRequest) {
         ProductCategoryResponse productCategoryResponse = productCategoryService.addProductCategory(productCategoryRequest);
         return ResponseEntity.ok(productCategoryResponse);
-    }
-
-    @GetMapping(value = "/products/{productCategoryName}")
-    public ResponseEntity<List<ProductResponse>> products(@PathVariable("productCategoryName") String productCategoryName) {
-        return null;
-    }
-
-    @GetMapping(value = "/product/{skuNumber}")
-    public ResponseEntity<ProductResponse> product(@PathVariable("skuNumber") String skuNumber) {
-        return null;
-    }
-
-    @PostMapping(value = "/product")
-    public ResponseEntity<ProductResponse> product(@RequestBody ProductRequest productRequest) {
-        return null;
     }
 }

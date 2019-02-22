@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class ProductCategoryRequest {
+public class AddProductCategoryRequest {
 
     private String productCategoryName;
 
