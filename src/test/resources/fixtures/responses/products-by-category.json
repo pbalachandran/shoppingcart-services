@@ -7,16 +7,16 @@
     "price": 799.99
   },
   {
-    "skuNumber": "APPLEIPHONE9S",
+    "skuNumber": "IPHONE9S",
     "productName": "iPhone 9S",
     "description": "Apple iPhone 9S",
     "inventoryCount": 100,
     "price": 999.99
   },
   {
-    "skuNumber": "APPLEIPAD",
-    "productName": "iPad",
-    "description": "Apple iPad",
+    "skuNumber": "IPAD10",
+    "productName": "iPad 10",
+    "description": "Apple iPad 10",
     "inventoryCount": 150,
     "price": 799.99
   }

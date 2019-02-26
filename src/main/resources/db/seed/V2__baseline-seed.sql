@@ -28,7 +28,7 @@ INSERT INTO PRODUCT (
   inventory_count,
   price,
   product_category_name)
-  VALUES (current_timestamp,'APPLEIPHONE9S','iPhone 9S','Apple iPhone 9S', 100,  999.99, (SELECT product_category_name FROM product_category WHERE product_category.product_category_name = 'Electronics'));
+  VALUES (current_timestamp,'IPHONE9S','iPhone 9S','Apple iPhone 9S', 100,  999.99, (SELECT product_category_name FROM product_category WHERE product_category.product_category_name = 'Electronics'));
 
 INSERT INTO PRODUCT (
   created_date,
@@ -38,7 +38,7 @@ INSERT INTO PRODUCT (
   inventory_count,
   price,
   product_category_name)
-  VALUES (current_timestamp,'APPLEIPAD','iPad', 'Apple iPad', 150, 799.99, (SELECT product_category_name FROM product_category WHERE product_category.product_category_name = 'Electronics'));
+  VALUES (current_timestamp,'IPAD10','iPad 10', 'Apple iPad 10', 150, 799.99, (SELECT product_category_name FROM product_category WHERE product_category.product_category_name = 'Electronics'));
 
 INSERT INTO PRODUCT (
   created_date,
@@ -48,4 +48,24 @@ INSERT INTO PRODUCT (
   inventory_count,
   price,
   product_category_name)
-VALUES (current_timestamp, 'TOROMOWER567', 'Toro Mower', 'Toro Mower', 150, 799.99, (SELECT product_category_name FROM product_category WHERE product_category.product_category_name = 'Lawn & Garden'));
+VALUES (current_timestamp, 'TOROMOWER567', 'Toro Mower 567', 'Toro Mower 567', 150, 1299.99, (SELECT product_category_name FROM product_category WHERE product_category.product_category_name = 'Lawn & Garden'));
+
+INSERT INTO CART (
+  created_date,
+  cart_name,
+  description)
+VALUES (current_timestamp, 'MyFirstCart', 'My First Cart');
+
+INSERT INTO ITEM (
+  created_date,
+  quantity,
+  cart_name,
+  sku_number)
+VALUES (current_timestamp, 1, (select cart_name FROM CART where cart_name = 'MyFirstCart'), (select product.sku_number FROM PRODUCT where sku_number = 'IPAD10'));
+
+INSERT INTO ITEM (
+  created_date,
+  quantity,
+  cart_name,
+  sku_number)
+VALUES (current_timestamp, 1, (select cart_name FROM CART where cart_name = 'MyFirstCart'), (select product.sku_number FROM PRODUCT where sku_number = 'TOROMOWER567'));
