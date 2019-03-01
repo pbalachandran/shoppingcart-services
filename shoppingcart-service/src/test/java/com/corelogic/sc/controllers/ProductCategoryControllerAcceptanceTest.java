@@ -1,12 +1,11 @@
 package com.corelogic.sc.controllers;
 
-import com.corelogic.sc.ShoppingCartServicesApplication;
+import com.corelogic.sc.ShoppingCartServiceApplication;
 import com.corelogic.sc.entities.ProductCategory;
 import com.corelogic.sc.requests.AddProductCategoryRequest;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = {ShoppingCartServicesApplication.class})
+@ContextConfiguration(classes = {ShoppingCartServiceApplication.class})
 public class ProductCategoryControllerAcceptanceTest {
 
     @Autowired

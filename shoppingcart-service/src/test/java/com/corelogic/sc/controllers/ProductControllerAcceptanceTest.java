@@ -1,6 +1,6 @@
 package com.corelogic.sc.controllers;
 
-import com.corelogic.sc.ShoppingCartServicesApplication;
+import com.corelogic.sc.ShoppingCartServiceApplication;
 import com.corelogic.sc.entities.ProductCategory;
 import com.corelogic.sc.requests.AddProductRequest;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = {ShoppingCartServicesApplication.class})
+@ContextConfiguration(classes = {ShoppingCartServiceApplication.class})
 public class ProductControllerAcceptanceTest {
 
     @Autowired
