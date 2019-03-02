@@ -3,6 +3,7 @@ package com.corelogic.sc.services;
 import com.corelogic.sc.entities.Product;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddProductRequest;
+import com.corelogic.sc.requests.DeleteProductRequest;
 import com.corelogic.sc.responses.ProductResponse;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
 import com.corelogic.sc.respositories.ProductRepository;
@@ -78,5 +79,10 @@ public class ProductService {
                 .inventoryCount(product.getInventoryCount())
                 .price(product.getPrice())
                 .build();
+    }
+
+    // TODO - immersion 3.1
+    public ProductResponse deleteProduct(DeleteProductRequest deleteProductRequest) {
+        return null;
     }
 }
