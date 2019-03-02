@@ -18,4 +18,3 @@ include 'services:webservice'
 rootProject.name = 'shoppingcart-services'
 
 include 'shoppingcart-service'
-include 'db-utilities'
