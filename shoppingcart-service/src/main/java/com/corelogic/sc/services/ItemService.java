@@ -6,6 +6,7 @@ import com.corelogic.sc.entities.Product;
 import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
+import com.corelogic.sc.requests.DeleteItemRequest;
 import com.corelogic.sc.responses.ItemResponse;
 import com.corelogic.sc.respositories.CartRepository;
 import com.corelogic.sc.respositories.ItemRepository;
@@ -59,6 +60,11 @@ public class ItemService {
                 .skuNumber(item.getProduct().getSkuNumber())
                 .price(item.getProduct().getPrice())
                 .build();
+    }
+
+    // TODO - immersion - 2.1
+    public ItemResponse deleteItem(DeleteItemRequest deleteItemRequest) throws CartNotFoundException, ProductNotFoundException {
+        return null;
     }
 
     public List<ItemResponse> retrieveItems(String cartName) throws CartNotFoundException {

@@ -3,6 +3,7 @@ package com.corelogic.sc.services;
 import com.corelogic.sc.entities.Cart;
 import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.requests.AddCartRequest;
+import com.corelogic.sc.requests.DeleteCartRequest;
 import com.corelogic.sc.responses.CartResponse;
 import com.corelogic.sc.respositories.CartRepository;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,10 @@ public class CartService {
                 .cartName(foundCart.getCartName())
                 .description(foundCart.getDescription())
                 .build();
+    }
+
+    // TODO - immersion - 1.1
+    public CartResponse deleteCart(DeleteCartRequest deleteCartRequest) {
+        return null;
     }
 }
