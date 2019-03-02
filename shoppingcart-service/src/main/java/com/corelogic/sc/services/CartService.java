@@ -16,11 +16,11 @@ public class CartService {
         this.cartRepository = cartRepository;
     }
 
-    public CartResponse createCart(AddCartRequest cartRequest) {
+    public CartResponse createCart(AddCartRequest addCartRequest) {
         Cart cart = Cart
                 .builder()
-                .cartName(cartRequest.getCartName())
-                .description(cartRequest.getDescription()).build();
+                .cartName(addCartRequest.getCartName())
+                .description(addCartRequest.getDescription()).build();
         Cart savedCart = cartRepository.save(cart);
         return CartResponse.builder().cartName(savedCart.getCartName()).description(savedCart.getDescription()).build();
     }

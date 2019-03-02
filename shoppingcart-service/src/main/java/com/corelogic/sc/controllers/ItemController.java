@@ -33,8 +33,8 @@ public class ItemController {
     }
 
     @PostMapping(value = "/item")
-    public ResponseEntity<ItemResponse> item(@RequestBody AddItemRequest itemRequest) throws CartNotFoundException, ProductNotFoundException {
-        ItemResponse itemResponse = itemService.addItem(itemRequest);
+    public ResponseEntity<ItemResponse> item(@RequestBody AddItemRequest addItemRequest) throws CartNotFoundException, ProductNotFoundException {
+        ItemResponse itemResponse = itemService.addItem(addItemRequest);
         return ResponseEntity.ok(itemResponse);
     }
 

@@ -58,15 +58,15 @@ public class ProductService {
                 .build();
     }
 
-    public ProductResponse addProduct(AddProductRequest productRequest) {
+    public ProductResponse addProduct(AddProductRequest addProductRequest) {
         Product product = productRepository.save(Product
                 .builder()
-                .skuNumber(productRequest.getSkuNumber())
-                .productName(productRequest.getProductName())
-                .description(productRequest.getDescription())
-                .inventoryCount(productRequest.getInventoryCount())
-                .price(productRequest.getPrice())
-                .productCategory(productCategoryRepository.findByProductCategoryName(productRequest.getProductCategoryName()))
+                .skuNumber(addProductRequest.getSkuNumber())
+                .productName(addProductRequest.getProductName())
+                .description(addProductRequest.getDescription())
+                .inventoryCount(addProductRequest.getInventoryCount())
+                .price(addProductRequest.getPrice())
+                .productCategory(productCategoryRepository.findByProductCategoryName(addProductRequest.getProductCategoryName()))
                 .createdDate(LocalDateTime.now())
                 .build());
 

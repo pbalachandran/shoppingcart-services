@@ -31,24 +31,24 @@ public class ItemService {
         this.productRepository = productRepository;
     }
 
-    public ItemResponse addItem(AddItemRequest itemRequest) throws CartNotFoundException, ProductNotFoundException {
-        Cart cart = cartRepository.findByCartName(itemRequest.getCartName());
+    public ItemResponse addItem(AddItemRequest addItemRequest) throws CartNotFoundException, ProductNotFoundException {
+        Cart cart = cartRepository.findByCartName(addItemRequest.getCartName());
         if (cart == null) {
-            throw new CartNotFoundException("Cart " + itemRequest.getCartName() + " was not found");
+            throw new CartNotFoundException("Cart " + addItemRequest.getCartName() + " was not found");
         }
 
-        Product product = productRepository.findBySkuNumber(itemRequest.getSkuNumber());
+        Product product = productRepository.findBySkuNumber(addItemRequest.getSkuNumber());
         if (product == null) {
-            throw new ProductNotFoundException("No product exists for sku# " + itemRequest.getSkuNumber());
+            throw new ProductNotFoundException("No product exists for sku# " + addItemRequest.getSkuNumber());
         }
 
-        product.setInventoryCount(product.getInventoryCount() - itemRequest.getQuantity());
+        product.setInventoryCount(product.getInventoryCount() - addItemRequest.getQuantity());
 
         Item item = itemRepository.save(Item
                 .builder()
                 .cart(cart)
                 .product(product)
-                .quantity(itemRequest.getQuantity())
+                .quantity(addItemRequest.getQuantity())
                 .createdDate(LocalDateTime.now())
                 .build());
 

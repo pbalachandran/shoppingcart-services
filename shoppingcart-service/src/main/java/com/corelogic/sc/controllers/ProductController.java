@@ -51,8 +51,8 @@ public class ProductController {
     }
 
     @PostMapping(value = "/product")
-    public ResponseEntity<ProductResponse> product(@RequestBody AddProductRequest productRequest) {
-        ProductResponse productResponse = productService.addProduct(productRequest);
+    public ResponseEntity<ProductResponse> product(@RequestBody AddProductRequest addProductRequest) {
+        ProductResponse productResponse = productService.addProduct(addProductRequest);
         return ResponseEntity.ok(productResponse);
     }
 }

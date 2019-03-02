@@ -29,8 +29,8 @@ public class CartController {
     }
 
     @PostMapping(value = "/cart")
-    public ResponseEntity<CartResponse> cart(@RequestBody AddCartRequest cartRequest) {
-        return ResponseEntity.ok(cartService.createCart(cartRequest));
+    public ResponseEntity<CartResponse> cart(@RequestBody AddCartRequest addCartRequest) {
+        return ResponseEntity.ok(cartService.createCart(addCartRequest));
     }
 
     @GetMapping(value = "/cart/{cartName}")

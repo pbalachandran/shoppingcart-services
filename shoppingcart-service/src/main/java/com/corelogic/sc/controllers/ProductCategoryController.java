@@ -44,8 +44,8 @@ public class ProductCategoryController {
     }
 
     @PostMapping(value = "/productCategory")
-    public ResponseEntity<ProductCategoryResponse> productCategory(@RequestBody AddProductCategoryRequest productCategoryRequest) {
-        ProductCategoryResponse productCategoryResponse = productCategoryService.addProductCategory(productCategoryRequest);
+    public ResponseEntity<ProductCategoryResponse> productCategory(@RequestBody AddProductCategoryRequest addProductCategoryRequest) {
+        ProductCategoryResponse productCategoryResponse = productCategoryService.addProductCategory(addProductCategoryRequest);
         return ResponseEntity.ok(productCategoryResponse);
     }
 

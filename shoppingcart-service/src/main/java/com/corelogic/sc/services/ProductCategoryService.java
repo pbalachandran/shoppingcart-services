@@ -46,11 +46,11 @@ public class ProductCategoryService {
                 .build();
     }
 
-    public ProductCategoryResponse addProductCategory(AddProductCategoryRequest productCategoryRequest) {
+    public ProductCategoryResponse addProductCategory(AddProductCategoryRequest addProductCategoryRequest) {
         ProductCategory productCategory = productCategoryRepository.save(ProductCategory
                 .builder()
-                .productCategoryName(productCategoryRequest.getProductCategoryName())
-                .description(productCategoryRequest.getDescription())
+                .productCategoryName(addProductCategoryRequest.getProductCategoryName())
+                .description(addProductCategoryRequest.getDescription())
                 .createdDate(LocalDateTime.now())
                 .build());
         return ProductCategoryResponse
