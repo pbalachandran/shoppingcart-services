@@ -1,20 +1,23 @@
 package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.ShoppingCartServiceApplication;
-import com.corelogic.sc.entities.ProductCategory;
 import com.corelogic.sc.requests.AddProductCategoryRequest;
-import com.corelogic.sc.respositories.ProductCategoryRepository;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,7 +34,19 @@ public class ProductCategoryControllerAcceptanceTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ProductCategoryRepository productCategoryRepository;
+    private RestTemplate restTemplate;
+
+    @Value("${db.utilities.url}")
+    private String dbUtilitiesURL;
+
+    @Before
+    public void setUp() throws Exception {
+        restTemplate.exchange(dbUtilitiesURL + "/reseed",
+                HttpMethod.POST,
+                null,
+                new ParameterizedTypeReference<Void>() {
+                });
+    }
 
     @Test
     public void productCategories_retrievesAllCategories() throws Exception {
@@ -64,9 +79,6 @@ public class ProductCategoryControllerAcceptanceTest {
                 .content(jsonPayload))
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.readFixture("responses/product-category-add.json")));
-
-        ProductCategory savedProductCategory = productCategoryRepository.findByProductCategoryName("Stationary Supplies");
-        productCategoryRepository.delete(savedProductCategory);
     }
 
     @Test

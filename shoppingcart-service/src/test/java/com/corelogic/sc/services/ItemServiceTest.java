@@ -11,9 +11,12 @@ import com.corelogic.sc.responses.ItemResponse;
 import com.corelogic.sc.respositories.CartRepository;
 import com.corelogic.sc.respositories.ItemRepository;
 import com.corelogic.sc.respositories.ProductRepository;
+import com.sun.jdi.connect.Connector;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -41,6 +44,8 @@ public class ItemServiceTest {
     @Mock
     private ProductRepository mockProductRepository;
 
+    @Captor
+    private ArgumentCaptor<Item> itemArgumentCaptor;
 
     private Cart savedCart;
 
@@ -181,6 +186,20 @@ public class ItemServiceTest {
                 .build());
 
        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void addItem_decrementsProductInventoryCount() throws CartNotFoundException, ProductNotFoundException {
+        subject.addItem(AddItemRequest
+                .builder()
+                .cartName("MyFirstCart")
+                .skuNumber("22")
+                .quantity(2)
+                .build());
+
+        verify(mockItemRepository).save(itemArgumentCaptor.capture());
+
+        assertEquals(98, itemArgumentCaptor.getValue().getProduct().getInventoryCount().intValue());
     }
 
     @Test(expected = CartNotFoundException.class)

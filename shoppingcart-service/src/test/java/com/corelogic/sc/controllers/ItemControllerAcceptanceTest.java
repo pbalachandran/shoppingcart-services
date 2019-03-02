@@ -1,20 +1,24 @@
 package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.ShoppingCartServiceApplication;
-import com.corelogic.sc.entities.Item;
 import com.corelogic.sc.requests.AddItemRequest;
-import com.corelogic.sc.respositories.ItemRepository;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,15 +33,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {ShoppingCartServiceApplication.class})
 public class ItemControllerAcceptanceTest {
 
-
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private ItemRepository itemRepository;
+    private RestTemplate restTemplate;
+
+    @Value("${db.utilities.url}")
+    private String dbUtilitiesURL;
+
+    @Before
+    public void setUp() throws Exception {
+        restTemplate.exchange(dbUtilitiesURL + "/reseed",
+                HttpMethod.POST,
+                null,
+                new ParameterizedTypeReference<Void>() {
+                });
+    }
 
     @Test
-    public void item_createsItems() throws Exception {
+    public void item_createsItems_decrementsProductInventoryCount() throws Exception {
         String jsonPayload =
                 new ObjectMapper().writeValueAsString(AddItemRequest
                         .builder()
@@ -53,8 +68,10 @@ public class ItemControllerAcceptanceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.readFixture("responses/item-add.json")));
 
-        Item iphone8S = itemRepository.findBySkuNumber("IPHONE8S");
-        itemRepository.delete(iphone8S.getItemId());
+        mockMvc.perform(get("/api/products/product/IPHONE8S")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(TestUtils.readFixture("responses/product-by-sku-inventorychange.json")));
     }
 
     @Test

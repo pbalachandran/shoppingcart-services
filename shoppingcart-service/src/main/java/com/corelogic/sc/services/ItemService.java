@@ -42,6 +42,8 @@ public class ItemService {
             throw new ProductNotFoundException("No product exists for sku# " + itemRequest.getSkuNumber());
         }
 
+        product.setInventoryCount(product.getInventoryCount() - itemRequest.getQuantity());
+
         Item item = itemRepository.save(Item
                 .builder()
                 .cart(cart)
