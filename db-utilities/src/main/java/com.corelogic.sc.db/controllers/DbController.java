@@ -93,7 +93,7 @@ public class DbController {
                 .skuNumber("IPAD10")
                 .productName("iPad 10")
                 .description("Apple iPad 10")
-                .inventoryCount(100)
+                .inventoryCount(150)
                 .price(799.99)
                 .productCategory(productCategoryRepository.findByProductCategoryName("Electronics"))
                 .build();
