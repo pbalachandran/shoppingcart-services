@@ -47,10 +47,4 @@ public class ProductController {
         ProductResponse productResponse = productService.addProduct(addProductRequest);
         return ResponseEntity.ok(productResponse);
     }
-
-    // TODO - immersion 3
-    @DeleteMapping(value = "/product")
-    public ResponseEntity<ProductResponse> product(@RequestBody DeleteProductRequest deleteProductRequest) {
-        return null;
-    }
 }

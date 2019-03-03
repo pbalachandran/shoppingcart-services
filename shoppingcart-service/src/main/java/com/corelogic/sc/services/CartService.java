@@ -40,7 +40,7 @@ public class CartService {
     }
 
     // TODO - immersion - 1.1
-    // TODO - immersion - item deletion
+    // TODO - immersion - 1.1 - transitive item deletion, using itemService
     public void deleteCart(DeleteCartRequest deleteCartRequest) throws CartNotFoundException {
         try {
             cartRepository.delete(deleteCartRequest.getCartName());

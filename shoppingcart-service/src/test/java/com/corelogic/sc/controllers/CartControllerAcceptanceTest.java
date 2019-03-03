@@ -138,6 +138,18 @@ public class CartControllerAcceptanceTest {
                 .andExpect(status().isOk());
     }
 
+    // TODO - immersion - 1.1 - test transitive item deletion
+    @Test
+    public void cart_deleteCartByName_deletesCart_deletesItemsInCart() throws Exception {
+
+    }
+
+    // TODO - immersion - 1.1 - test adjustment of product inventory count
+    @Test
+    public void cart_deleteCartByName_deletesCart_incrementsProductInventoryCount() throws Exception {
+
+    }
+
     @Test
     public void cart_deleteCartByInvalidCartName_throwsCartNotFoundException() throws Exception{
         String jsonPayload =

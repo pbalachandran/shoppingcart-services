@@ -60,9 +60,4 @@ public class ProductCategoryService {
                 .description(productCategory.getDescription())
                 .build();
     }
-
-    // TODO - immersion 4.1
-    public ProductCategoryResponse deleteProductCategory(DeleteProductCategoryRequest deleteProductCategoryRequest) {
-        return null;
-    }
 }

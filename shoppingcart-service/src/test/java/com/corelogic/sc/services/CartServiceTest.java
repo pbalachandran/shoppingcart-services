@@ -73,6 +73,11 @@ public class CartServiceTest {
         verify(mockCartRepository).delete("MyFirstCart");
     }
 
+    // TODO - immersion - 1.1 - transitive item deletion, using itemService
+    @Test
+    public void deleteCart_invokesItemService() throws CartNotFoundException {
+    }
+
     @Test(expected = CartNotFoundException.class)
     public void deleteCart_doesNotFindCartByThatCartName_throwsCartNotFoundException() throws Exception {
         doThrow(CartNotFoundException.class).when(mockCartRepository).delete("InvalidCart");

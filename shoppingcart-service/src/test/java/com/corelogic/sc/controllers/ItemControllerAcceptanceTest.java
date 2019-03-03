@@ -52,7 +52,7 @@ public class ItemControllerAcceptanceTest {
     }
 
     @Test
-    public void item_createsItems_decrementsProductInventoryCount() throws Exception {
+    public void item_createsItem_decrementsProductInventoryCount() throws Exception {
         String jsonPayload =
                 new ObjectMapper().writeValueAsString(AddItemRequest
                         .builder()
@@ -116,6 +116,11 @@ public class ItemControllerAcceptanceTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.readFixture("responses/items-by-cartname.json"), true));
+    }
+
+    // TODO - immersion - 2.1
+    @Test
+    public void item_deletesItem_incrementsProductInventoryCount() throws Exception {
     }
 
     @Test

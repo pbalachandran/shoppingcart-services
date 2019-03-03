@@ -44,12 +44,6 @@ public class ProductCategoryController {
         return ResponseEntity.ok(productCategoryResponse);
     }
 
-    // TODO - immersion 4
-    @DeleteMapping(value = "/productCategory")
-    public ResponseEntity<ProductCategoryResponse> productCategory(@RequestBody DeleteProductCategoryRequest deleteProductCategoryRequest) {
-        return null;
-    }
-
     @ExceptionHandler(ProductCategoryNotFoundException.class)
     public ResponseEntity<ProductCategoryExceptionResponse> productCategoryNotFound(ProductCategoryNotFoundException exception) {
         return new ResponseEntity<>(new ProductCategoryExceptionResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);

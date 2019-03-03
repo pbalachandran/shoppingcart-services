@@ -202,6 +202,17 @@ public class ItemServiceTest {
         assertEquals(98, itemArgumentCaptor.getValue().getProduct().getInventoryCount().intValue());
     }
 
+    // TODO - immersions - 2.1
+    @Test
+    public void deleteItem_deletesItem() {
+    }
+
+    // TODO - immersions - 2.1
+    // TODO - immersions - 2.1 - add back to product inventory count
+    @Test
+    public void deleteItem_incrementsProductInventoryCount() {
+    }
+
     @Test(expected = CartNotFoundException.class)
     public void addItem_findByCartNameWithInvalidCartName_throwsCartNotFoundException() throws CartNotFoundException, ProductNotFoundException {
         subject.addItem(AddItemRequest

@@ -80,9 +80,4 @@ public class ProductService {
                 .price(product.getPrice())
                 .build();
     }
-
-    // TODO - immersion 3.1
-    public ProductResponse deleteProduct(DeleteProductRequest deleteProductRequest) {
-        return null;
-    }
 }
