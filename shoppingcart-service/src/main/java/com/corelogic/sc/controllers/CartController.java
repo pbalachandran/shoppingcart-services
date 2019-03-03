@@ -35,8 +35,9 @@ public class CartController {
 
     // TODO - immersion - 1
     @DeleteMapping(value = "/cart")
-    public ResponseEntity<CartResponse> cart(@RequestBody DeleteCartRequest deleteCartRequest) throws CartNotFoundException {
-        return null;
+    public ResponseEntity cart(@RequestBody DeleteCartRequest deleteCartRequest) throws CartNotFoundException {
+        cartService.deleteCart(deleteCartRequest);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @ExceptionHandler(CartNotFoundException.class)

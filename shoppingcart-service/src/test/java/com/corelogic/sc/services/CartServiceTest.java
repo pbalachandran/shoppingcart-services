@@ -3,6 +3,7 @@ package com.corelogic.sc.services;
 import com.corelogic.sc.entities.Cart;
 import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.requests.AddCartRequest;
+import com.corelogic.sc.requests.DeleteCartRequest;
 import com.corelogic.sc.responses.CartResponse;
 import com.corelogic.sc.respositories.CartRepository;
 import org.junit.Before;
@@ -12,8 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CartServiceTest {
@@ -60,5 +60,23 @@ public class CartServiceTest {
 
         subject.findCart("Cart101");
         verify(mockCartRepository).findByCartName("Cart101");
+    }
+
+    @Test
+    public void deleteCart_deletesCart() throws CartNotFoundException {
+        doNothing().when(mockCartRepository).delete("MyFirstCart");
+
+        subject.deleteCart(DeleteCartRequest
+                .builder()
+                .cartName("MyFirstCart")
+                .build());
+        verify(mockCartRepository).delete("MyFirstCart");
+    }
+
+    @Test(expected = CartNotFoundException.class)
+    public void deleteCart_doesNotFindCartByThatCartName_throwsCartNotFoundException() throws Exception {
+        doThrow(CartNotFoundException.class).when(mockCartRepository).delete("InvalidCart");
+
+        subject.findCart("InvalidCart");
     }
 }

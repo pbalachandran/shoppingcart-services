@@ -6,6 +6,7 @@ import com.corelogic.sc.requests.AddCartRequest;
 import com.corelogic.sc.requests.DeleteCartRequest;
 import com.corelogic.sc.responses.CartResponse;
 import com.corelogic.sc.respositories.CartRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,7 +40,12 @@ public class CartService {
     }
 
     // TODO - immersion - 1.1
-    public CartResponse deleteCart(DeleteCartRequest deleteCartRequest) {
-        return null;
+    // TODO - immersion - item deletion
+    public void deleteCart(DeleteCartRequest deleteCartRequest) throws CartNotFoundException {
+        try {
+            cartRepository.delete(deleteCartRequest.getCartName());
+        } catch (EmptyResultDataAccessException ex) {
+            throw new CartNotFoundException("Cart " + deleteCartRequest.getCartName() + " was not found");
+        }
     }
 }

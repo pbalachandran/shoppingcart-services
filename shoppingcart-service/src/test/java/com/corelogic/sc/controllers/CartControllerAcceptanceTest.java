@@ -2,6 +2,7 @@ package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.ShoppingCartServiceApplication;
 import com.corelogic.sc.requests.AddCartRequest;
+import com.corelogic.sc.requests.DeleteCartRequest;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -17,8 +18,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.client.RestTemplate;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -115,6 +119,37 @@ public class CartControllerAcceptanceTest {
     @Test
     public void cart_retrieveCartByInvalidCartName_throwsCartNotFoundException() throws Exception {
         mockMvc.perform(get("/api/carts/cart/InvalidCart"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(TestUtils.readFixture("responses/cart-notfound.json"), true));
+    }
+
+    @Test
+    public void cart_deleteCartByName_deletesCart() throws Exception{
+        String jsonPayload =
+                new ObjectMapper().writeValueAsString(DeleteCartRequest
+                        .builder()
+                        .cartName("MyFirstCart")
+                        .build());
+
+        mockMvc.perform(delete("/api/carts/cart")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonPayload))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void cart_deleteCartByInvalidCartName_throwsCartNotFoundException() throws Exception{
+        String jsonPayload =
+                new ObjectMapper().writeValueAsString(DeleteCartRequest
+                        .builder()
+                        .cartName("InvalidCart")
+                        .build());
+
+        mockMvc.perform(delete("/api/carts/cart")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonPayload))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().json(TestUtils.readFixture("responses/cart-notfound.json"), true));
     }
