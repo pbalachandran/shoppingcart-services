@@ -15,7 +15,6 @@
     * User management and association with a cart
     * Tie user with cart operations (create, add/remove item, find)
     * Handle insufficient product inventory, at item creation
-    * 
 
 ## Db Utilities
 * Sub-project that provides DB utilities - wipe, seed, reseed
