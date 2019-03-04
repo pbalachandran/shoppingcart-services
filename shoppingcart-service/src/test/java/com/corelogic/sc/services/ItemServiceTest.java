@@ -5,13 +5,13 @@ import com.corelogic.sc.entities.Item;
 import com.corelogic.sc.entities.Product;
 import com.corelogic.sc.entities.ProductCategory;
 import com.corelogic.sc.exceptions.CartNotFoundException;
+import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
 import com.corelogic.sc.responses.ItemResponse;
 import com.corelogic.sc.respositories.CartRepository;
 import com.corelogic.sc.respositories.ItemRepository;
 import com.corelogic.sc.respositories.ProductRepository;
-import com.sun.jdi.connect.Connector;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -137,7 +137,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void addItem_findsCartByCartName() throws CartNotFoundException, ProductNotFoundException {
+    public void addItem_findsCartByCartName() throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
         subject.addItem(AddItemRequest
                 .builder()
                 .cartName("MyFirstCart")
@@ -149,7 +149,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void addItem_findsProductBySkuNumber() throws CartNotFoundException, ProductNotFoundException {
+    public void addItem_findsProductBySkuNumber() throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
         subject.addItem(AddItemRequest
                 .builder()
                 .cartName("MyFirstCart")
@@ -161,7 +161,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void addItem_addsItem() throws CartNotFoundException, ProductNotFoundException {
+    public void addItem_addsItem() throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
         ItemResponse actual = subject.addItem(AddItemRequest
                 .builder()
                 .cartName("MyFirstCart")
@@ -185,11 +185,12 @@ public class ItemServiceTest {
                 .createdDate(any(LocalDateTime.class))
                 .build());
 
-       assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    public void addItem_decrementsProductInventoryCount() throws CartNotFoundException, ProductNotFoundException {
+    public void addItem_decrementsProductInventoryCount()
+            throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
         subject.addItem(AddItemRequest
                 .builder()
                 .cartName("MyFirstCart")
@@ -202,10 +203,15 @@ public class ItemServiceTest {
         assertEquals(98, itemArgumentCaptor.getValue().getProduct().getInventoryCount().intValue());
     }
 
-    // TODO - immersion - 3.1
-    // TODO - Insufficient Product Inventory Exception
-    @Test
-    public void addItem_onInsufficientProductInventory_throwsInsufficientProductInventoryException() {
+    @Test(expected = InsufficientProductInventoryException.class)
+    public void addItem_onInsufficientProductInventory_throwsInsufficientProductInventoryException()
+            throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
+        subject.addItem(AddItemRequest
+                .builder()
+                .cartName("MyFirstCart")
+                .skuNumber("22")
+                .quantity(102)
+                .build());
     }
 
     // TODO - immersions - 2.1
@@ -220,7 +226,8 @@ public class ItemServiceTest {
     }
 
     @Test(expected = CartNotFoundException.class)
-    public void addItem_findByCartNameWithInvalidCartName_throwsCartNotFoundException() throws CartNotFoundException, ProductNotFoundException {
+    public void addItem_findByCartNameWithInvalidCartName_throwsCartNotFoundException()
+            throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
         subject.addItem(AddItemRequest
                 .builder()
                 .cartName("InvalidCart")
@@ -230,7 +237,8 @@ public class ItemServiceTest {
     }
 
     @Test(expected = ProductNotFoundException.class)
-    public void addItem_findByProductWithInvalidSkuNumber_throwsProductNotFoundException() throws CartNotFoundException, ProductNotFoundException {
+    public void addItem_findByProductWithInvalidSkuNumber_throwsProductNotFoundException()
+            throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
         subject.addItem(AddItemRequest
                 .builder()
                 .cartName("MyFirstCart")
@@ -251,12 +259,12 @@ public class ItemServiceTest {
         verify(mockCartRepository).findByCartName("MyFirstCart");
 
         List<ItemResponse> expected = Arrays.asList(ItemResponse
-                .builder()
-                .cartName("MyFirstCart")
-                .skuNumber("22")
-                .quantity(1)
-                .price(799.99)
-                .build(),
+                        .builder()
+                        .cartName("MyFirstCart")
+                        .skuNumber("22")
+                        .quantity(1)
+                        .price(799.99)
+                        .build(),
                 ItemResponse
                         .builder()
                         .cartName("MyFirstCart")
@@ -268,7 +276,7 @@ public class ItemServiceTest {
     }
 
     @Test(expected = CartNotFoundException.class)
-    public void retrieveItems_findByCartNameWithInvalidCartName_throwsCartNotFoundException() throws CartNotFoundException, ProductNotFoundException {
+    public void retrieveItems_findByCartNameWithInvalidCartName_throwsCartNotFoundException() throws CartNotFoundException {
         subject.retrieveItems("InvalidCart");
     }
 }

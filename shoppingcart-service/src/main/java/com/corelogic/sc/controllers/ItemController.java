@@ -2,6 +2,7 @@ package com.corelogic.sc.controllers;
 
 
 import com.corelogic.sc.exceptions.CartNotFoundException;
+import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
 import com.corelogic.sc.requests.DeleteItemRequest;
 import com.corelogic.sc.responses.ItemExceptionResponse;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
@@ -27,10 +28,9 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    // TODO - immersion - 3
-    // TODO - Insufficient Product Inventory Exception
     @PostMapping(value = "/item")
-    public ResponseEntity<ItemResponse> item(@RequestBody AddItemRequest addItemRequest) throws CartNotFoundException, ProductNotFoundException {
+    public ResponseEntity<ItemResponse> item(@RequestBody AddItemRequest addItemRequest)
+            throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
         ItemResponse itemResponse = itemService.addItem(addItemRequest);
         return ResponseEntity.ok(itemResponse);
     }
@@ -54,6 +54,11 @@ public class ItemController {
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ItemExceptionResponse> productNotFound(ProductNotFoundException exception) {
+        return new ResponseEntity<>(new ItemExceptionResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InsufficientProductInventoryException.class)
+    public ResponseEntity<ItemExceptionResponse> insufficientProductInventory(InsufficientProductInventoryException exception) {
         return new ResponseEntity<>(new ItemExceptionResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

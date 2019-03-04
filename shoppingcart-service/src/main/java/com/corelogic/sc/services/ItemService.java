@@ -4,6 +4,7 @@ import com.corelogic.sc.entities.Cart;
 import com.corelogic.sc.entities.Item;
 import com.corelogic.sc.entities.Product;
 import com.corelogic.sc.exceptions.CartNotFoundException;
+import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
 import com.corelogic.sc.requests.DeleteItemRequest;
@@ -32,9 +33,8 @@ public class ItemService {
         this.productRepository = productRepository;
     }
 
-    // TODO - immersion - 3.1
-    // TODO - Insufficient Product Inventory Exception
-    public ItemResponse addItem(AddItemRequest addItemRequest) throws CartNotFoundException, ProductNotFoundException {
+    public ItemResponse addItem(AddItemRequest addItemRequest)
+            throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
         Cart cart = cartRepository.findByCartName(addItemRequest.getCartName());
         if (cart == null) {
             throw new CartNotFoundException("Cart " + addItemRequest.getCartName() + " was not found");
@@ -45,7 +45,10 @@ public class ItemService {
             throw new ProductNotFoundException("No product exists for sku# " + addItemRequest.getSkuNumber());
         }
 
-        // TODO - 3.1 Check & throw InsufficientProductInventoryException
+        if (product.getInventoryCount() < addItemRequest.getQuantity()) {
+            throw new InsufficientProductInventoryException("Insufficient inventory count for product sku# "
+                    + addItemRequest.getSkuNumber());
+        }
         product.setInventoryCount(product.getInventoryCount() - addItemRequest.getQuantity());
 
         Item item = itemRepository.save(Item

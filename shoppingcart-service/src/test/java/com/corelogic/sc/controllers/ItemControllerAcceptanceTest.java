@@ -74,13 +74,23 @@ public class ItemControllerAcceptanceTest {
                 .andExpect(content().json(TestUtils.readFixture("responses/product-by-sku-inventorychange.json")));
     }
 
-    // TODO - immersion - 3.1
-    // TODO - Insufficient Product Inventory Exception
     @Test
-    public void item_createsItem_insufficientProductInventoryCount_throwsInsufficientProductInventoryException() throws Exception {
+    public void item_createsItem_onInsufficientProductInventoryCount_throwsInsufficientProductInventoryException() throws Exception {
+        String jsonPayload =
+                new ObjectMapper().writeValueAsString(AddItemRequest
+                        .builder()
+                        .cartName("MyFirstCart")
+                        .skuNumber("IPHONE8S")
+                        .quantity(102)
+                        .build());
 
+        mockMvc.perform(post("/api/items/item")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonPayload))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(TestUtils.readFixture("responses/insufficient-product-inventory.json")));
     }
-
 
     @Test
     public void item_retrieveCartByInvalidCartName_throwsCartNotFoundException() throws Exception {
