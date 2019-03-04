@@ -74,6 +74,14 @@ public class ItemControllerAcceptanceTest {
                 .andExpect(content().json(TestUtils.readFixture("responses/product-by-sku-inventorychange.json")));
     }
 
+    // TODO - immersion - 3.1
+    // TODO - Insufficient Product Inventory Exception
+    @Test
+    public void item_createsItem_insufficientProductInventoryCount_throwsInsufficientProductInventoryException() throws Exception {
+
+    }
+
+
     @Test
     public void item_retrieveCartByInvalidCartName_throwsCartNotFoundException() throws Exception {
         String jsonPayload =

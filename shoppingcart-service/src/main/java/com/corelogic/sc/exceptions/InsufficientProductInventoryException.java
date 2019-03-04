@@ -1,7 +1,7 @@
 package com.corelogic.sc.exceptions;
 
-public class CartNotFoundException extends Exception {
-    public CartNotFoundException(String message) {
+public class InsufficientProductInventoryException extends Exception {
+    public InsufficientProductInventoryException(String message) {
         super(message);
     }
 }

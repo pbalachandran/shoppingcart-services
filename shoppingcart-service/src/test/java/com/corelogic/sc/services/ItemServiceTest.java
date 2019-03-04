@@ -202,6 +202,12 @@ public class ItemServiceTest {
         assertEquals(98, itemArgumentCaptor.getValue().getProduct().getInventoryCount().intValue());
     }
 
+    // TODO - immersion - 3.1
+    // TODO - Insufficient Product Inventory Exception
+    @Test
+    public void addItem_onInsufficientProductInventory_throwsInsufficientProductInventoryException() {
+    }
+
     // TODO - immersions - 2.1
     @Test
     public void deleteItem_deletesItem() {

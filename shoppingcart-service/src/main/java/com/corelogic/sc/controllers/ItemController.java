@@ -27,6 +27,8 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    // TODO - immersion - 3
+    // TODO - Insufficient Product Inventory Exception
     @PostMapping(value = "/item")
     public ResponseEntity<ItemResponse> item(@RequestBody AddItemRequest addItemRequest) throws CartNotFoundException, ProductNotFoundException {
         ItemResponse itemResponse = itemService.addItem(addItemRequest);

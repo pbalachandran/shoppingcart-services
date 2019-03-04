@@ -32,6 +32,8 @@ public class ItemService {
         this.productRepository = productRepository;
     }
 
+    // TODO - immersion - 3.1
+    // TODO - Insufficient Product Inventory Exception
     public ItemResponse addItem(AddItemRequest addItemRequest) throws CartNotFoundException, ProductNotFoundException {
         Cart cart = cartRepository.findByCartName(addItemRequest.getCartName());
         if (cart == null) {
@@ -43,6 +45,7 @@ public class ItemService {
             throw new ProductNotFoundException("No product exists for sku# " + addItemRequest.getSkuNumber());
         }
 
+        // TODO - 3.1 Check & throw InsufficientProductInventoryException
         product.setInventoryCount(product.getInventoryCount() - addItemRequest.getQuantity());
 
         Item item = itemRepository.save(Item
