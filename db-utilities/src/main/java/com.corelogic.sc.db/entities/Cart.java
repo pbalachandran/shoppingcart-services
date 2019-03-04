@@ -4,12 +4,7 @@ package com.corelogic.sc.db.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +23,9 @@ public class Cart implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "status")
+    private String status;
 
     @Column(name = "created_date")
     private LocalDateTime createdDate;

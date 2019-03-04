@@ -5,6 +5,7 @@ import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.requests.AddCartRequest;
 import com.corelogic.sc.requests.DeleteCartRequest;
 import com.corelogic.sc.responses.CartResponse;
+import com.corelogic.sc.responses.CartStatus;
 import com.corelogic.sc.respositories.CartRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,6 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class CartServiceTest {
 
-
     @Mock
     private CartRepository mockCartRepository;
 
@@ -31,25 +31,24 @@ public class CartServiceTest {
 
     @Test
     public void createCart_createsCart() {
-
-        Cart savedCart = Cart.builder().cartName("Cart101").description("MyFirstCart").build();
-        when(mockCartRepository.save(Cart.builder().cartName("Cart101").description("MyFirstCart").build())).thenReturn(savedCart);
+        Cart savedCart = Cart.builder().cartName("Cart101").description("MyFirstCart").status("ACTIVE").build();
+        when(mockCartRepository.save(Cart.builder().cartName("Cart101").description("MyFirstCart").status("ACTIVE").build())).thenReturn(savedCart);
 
         CartResponse actual = subject.createCart(AddCartRequest.builder().cartName("Cart101").description("MyFirstCart").build());
 
-        CartResponse expected = CartResponse.builder().cartName("Cart101").description("MyFirstCart").build();
-        verify(mockCartRepository).save(Cart.builder().cartName("Cart101").description("MyFirstCart").build());
+        CartResponse expected = CartResponse.builder().cartName("Cart101").description("MyFirstCart").status(CartStatus.ACTIVE).build();
+        verify(mockCartRepository).save(Cart.builder().cartName("Cart101").description("MyFirstCart").status("ACTIVE").build());
         assertEquals(expected, actual);
     }
 
     @Test
     public void findCart_findsCartByCartName() throws Exception {
-        Cart savedCart = Cart.builder().cartName("Cart101").description("MyFirstCart").build();
+        Cart savedCart = Cart.builder().cartName("Cart101").description("MyFirstCart").status("ACTIVE").build();
         when(mockCartRepository.findByCartName("Cart101")).thenReturn(savedCart);
 
         CartResponse actual = subject.findCart("Cart101");
 
-        CartResponse expected = CartResponse.builder().cartName("Cart101").description("MyFirstCart").build();
+        CartResponse expected = CartResponse.builder().cartName("Cart101").description("MyFirstCart").status(CartStatus.ACTIVE).build();
         verify(mockCartRepository).findByCartName("Cart101");
         assertEquals(expected, actual);
     }

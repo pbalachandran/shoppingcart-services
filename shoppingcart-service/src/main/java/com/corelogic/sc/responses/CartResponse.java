@@ -10,4 +10,5 @@ import lombok.Data;
 public class CartResponse {
     private String cartName;
     private String description;
+    private CartStatus status;
 }

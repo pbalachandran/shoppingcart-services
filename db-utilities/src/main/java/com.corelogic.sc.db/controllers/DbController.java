@@ -115,6 +115,7 @@ public class DbController {
                 .createdDate(now)
                 .cartName("MyFirstCart")
                 .description("My First Cart")
+                .status("Active")
                 .build();
         cartRepository.save(cart);
 

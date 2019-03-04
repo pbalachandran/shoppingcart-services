@@ -1,4 +1,5 @@
 {
   "cartName": "Cart1",
-  "description": "Cart1"
+  "description": "Cart1",
+  "status": "ACTIVE"
 }

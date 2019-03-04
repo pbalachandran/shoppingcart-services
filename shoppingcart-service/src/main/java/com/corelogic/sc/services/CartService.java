@@ -5,6 +5,7 @@ import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.requests.AddCartRequest;
 import com.corelogic.sc.requests.DeleteCartRequest;
 import com.corelogic.sc.responses.CartResponse;
+import com.corelogic.sc.responses.CartStatus;
 import com.corelogic.sc.respositories.CartRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,17 @@ public class CartService {
         Cart cart = Cart
                 .builder()
                 .cartName(addCartRequest.getCartName())
-                .description(addCartRequest.getDescription()).build();
+                .description(addCartRequest.getDescription())
+                .status(CartStatus.ACTIVE.name())
+                .build();
         Cart savedCart = cartRepository.save(cart);
-        return CartResponse.builder().cartName(savedCart.getCartName()).description(savedCart.getDescription()).build();
+
+        return CartResponse
+                .builder()
+                .cartName(savedCart.getCartName())
+                .description(savedCart.getDescription())
+                .status(CartStatus.getCartStatus(savedCart.getStatus()))
+                .build();
     }
 
     public CartResponse findCart(String cartName) throws CartNotFoundException {
@@ -36,6 +45,7 @@ public class CartService {
                 .builder()
                 .cartName(foundCart.getCartName())
                 .description(foundCart.getDescription())
+                .status(CartStatus.getCartStatus(foundCart.getStatus()))
                 .build();
     }
 

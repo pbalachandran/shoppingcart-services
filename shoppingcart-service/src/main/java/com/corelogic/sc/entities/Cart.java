@@ -29,6 +29,9 @@ public class Cart implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "status")
+    private String status;
+
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 

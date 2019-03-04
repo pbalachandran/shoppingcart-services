@@ -53,8 +53,9 @@ VALUES (current_timestamp, 'TOROMOWER567', 'Toro Mower 567', 'Toro Mower 567', 1
 INSERT INTO CART (
   created_date,
   cart_name,
-  description)
-VALUES (current_timestamp, 'MyFirstCart', 'My First Cart');
+  description,
+  status)
+VALUES (current_timestamp, 'MyFirstCart', 'My First Cart', 'ACTIVE');
 
 INSERT INTO ITEM (
   created_date,
