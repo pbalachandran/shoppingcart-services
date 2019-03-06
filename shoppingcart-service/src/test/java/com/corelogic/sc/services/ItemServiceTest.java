@@ -6,8 +6,10 @@ import com.corelogic.sc.entities.Product;
 import com.corelogic.sc.entities.ProductCategory;
 import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
+import com.corelogic.sc.exceptions.ItemNotFoundException;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
+import com.corelogic.sc.requests.DeleteItemRequest;
 import com.corelogic.sc.responses.ItemResponse;
 import com.corelogic.sc.respositories.CartRepository;
 import com.corelogic.sc.respositories.ItemRepository;
@@ -27,6 +29,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -57,11 +60,13 @@ public class ItemServiceTest {
 
     private Item item1, item2;
 
+    private LocalDateTime now;
+
     @Before
     public void setUp() throws Exception {
         subject = new ItemService(mockItemRepository, mockCartRepository, mockProductRepository);
 
-        LocalDateTime now = LocalDateTime.now();
+        now = LocalDateTime.now();
 
         savedCart = Cart
                 .builder()
@@ -214,9 +219,164 @@ public class ItemServiceTest {
                 .build());
     }
 
-    // TODO - immersions - 2.1
     @Test
-    public void deleteItem_deletesItem() {
+    public void deleteItem_whenQuantityDeletedIsLessThanItemQuantity_updatesQuantity() throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+        Item savedItemWithQuantity = Item
+                .builder()
+                .itemId(1L)
+                .cart(savedCart)
+                .product(savedProduct1)
+                .quantity(3)
+                .createdDate(now)
+                .build();
+        when(mockItemRepository.findBySkuNumber("22")).thenReturn(savedItemWithQuantity);
+
+        Cart savedCartWithItems = Cart
+                .builder()
+                .cartName("MyFirstCart")
+                .description("My First Cart")
+                .items(Arrays.asList(savedItemWithQuantity))
+                .createdDate(now)
+                .build();
+        when(mockCartRepository.findByCartName("MyFirstCart")).thenReturn(savedCartWithItems);
+
+        Product savedProductWithReducedInventory = Product
+                .builder()
+                .productName("iPhone8S")
+                .skuNumber("22")
+                .inventoryCount(97)
+                .description("iPhone 8S")
+                .price(799.99)
+                .productCategory(savedProductCategory)
+                .items(Arrays.asList(savedItemWithQuantity))
+                .createdDate(now)
+                .build();
+        when(mockProductRepository.findBySkuNumber("22")).thenReturn(savedProductWithReducedInventory);
+
+        Product savedProductIncrementQuantity = Product
+                .builder()
+                .productName("iPhone8S")
+                .skuNumber("22")
+                .inventoryCount(98)
+                .description("iPhone 8S")
+                .price(799.99)
+                .productCategory(savedProductCategory)
+                .items(Arrays.asList(Item
+                        .builder()
+                        .itemId(1L)
+                        .cart(savedCart)
+                        .product(savedProduct1)
+                        .quantity(2)
+                        .createdDate(now)
+                        .build()))
+                .createdDate(now)
+                .build();
+        when(mockProductRepository.save(savedProductIncrementQuantity)).thenReturn(savedProductIncrementQuantity);
+
+        ItemResponse actual = subject.deleteItem(DeleteItemRequest
+                .builder()
+                .skuNumber("22")
+                .quantity(1)
+                .cartName("MyFirstCart")
+                .build());
+
+        ItemResponse expected = ItemResponse
+                .builder()
+                .cartName("MyFirstCart")
+                .skuNumber("22")
+                .quantity(1)
+                .price(799.99)
+                .build();
+
+        verify(mockItemRepository).findBySkuNumber("22");
+        verify(mockCartRepository).findByCartName("MyFirstCart");
+        verify(mockProductRepository).findBySkuNumber("22");
+        verify(mockProductRepository).save(savedProductIncrementQuantity);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void deleteItem_whenQuantityDeletedIsEqualToItemQuantity_deleteItem() throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+        Item savedItemWithQuantity = Item
+                .builder()
+                .itemId(1L)
+                .cart(savedCart)
+                .product(savedProduct1)
+                .quantity(1)
+                .createdDate(now)
+                .build();
+        when(mockItemRepository.findBySkuNumber("22")).thenReturn(savedItemWithQuantity);
+
+        Cart savedCartWithItems = Cart
+                .builder()
+                .cartName("MyFirstCart")
+                .description("My First Cart")
+                .items(Arrays.asList(savedItemWithQuantity))
+                .createdDate(now)
+                .build();
+        when(mockCartRepository.findByCartName("MyFirstCart")).thenReturn(savedCartWithItems);
+
+        Product savedProductWithReducedInventory = Product
+                .builder()
+                .productName("iPhone8S")
+                .skuNumber("22")
+                .inventoryCount(99)
+                .description("iPhone 8S")
+                .price(799.99)
+                .productCategory(savedProductCategory)
+                .items(Arrays.asList(savedItemWithQuantity))
+                .createdDate(now)
+                .build();
+        when(mockProductRepository.findBySkuNumber("22")).thenReturn(savedProductWithReducedInventory);
+
+        doNothing().when(mockItemRepository).delete(1L);
+
+        Product savedProductOriginalQuantity = Product
+                .builder()
+                .productName("iPhone8S")
+                .skuNumber("22")
+                .inventoryCount(100)
+                .description("iPhone 8S")
+                .price(799.99)
+                .productCategory(savedProductCategory)
+                .items(Collections.emptyList())
+                .createdDate(now)
+                .build();
+        when(mockProductRepository.save(savedProductOriginalQuantity)).thenReturn(savedProductOriginalQuantity);
+
+        ItemResponse actual = subject.deleteItem(DeleteItemRequest
+                .builder()
+                .skuNumber("22")
+                .quantity(1)
+                .cartName("MyFirstCart")
+                .build());
+
+        ItemResponse expected = ItemResponse
+                .builder()
+                .cartName("MyFirstCart")
+                .skuNumber("22")
+                .quantity(1)
+                .price(799.99)
+                .build();
+
+        verify(mockItemRepository).findBySkuNumber("22");
+        verify(mockCartRepository).findByCartName("MyFirstCart");
+        verify(mockProductRepository).findBySkuNumber("22");
+        verify(mockItemRepository).delete(1L);
+        verify(mockProductRepository).save(savedProductOriginalQuantity);
+        assertEquals(expected, actual);
+     }
+
+    @Test(expected = ItemNotFoundException.class)
+    public void deleteItem_whenItemIsNotFound_throwsItemNotFoundException()
+            throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+
+        subject.deleteItem(DeleteItemRequest
+                .builder()
+                .skuNumber("InvalidItemSKU")
+                .quantity(1)
+                .cartName("MyFirstCart")
+                .build());
     }
 
     // TODO - immersions - 2.1

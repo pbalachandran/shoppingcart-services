@@ -135,6 +135,9 @@ public class DbController {
                 .product(productRepository.findBySkuNumber("TOROMOWER567"))
                 .build();
         itemRepository.save(Arrays.asList(iPad10Item, toroMowerItem));
+
+        cart.setItems(Arrays.asList(iPad10Item, toroMowerItem));
+        cartRepository.save(cart);
     }
 
     @PostMapping(value = "reseed")

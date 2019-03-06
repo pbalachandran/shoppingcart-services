@@ -42,7 +42,7 @@ public class Item implements Serializable {
     private Cart cart;
 
     @JsonManagedReference
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sku_number", nullable = false)
     private Product product;
 }

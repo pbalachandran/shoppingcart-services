@@ -15,10 +15,11 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -53,7 +54,7 @@ public class Product implements Serializable {
     private ProductCategory productCategory;
 
     @JsonBackReference
-    @OneToOne(mappedBy = "product",
+    @OneToMany(mappedBy = "product",
             cascade = CascadeType.ALL)
-    private Item item;
+    private List<Item> items;
 }

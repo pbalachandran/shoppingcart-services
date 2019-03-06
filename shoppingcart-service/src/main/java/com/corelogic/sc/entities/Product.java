@@ -57,7 +57,7 @@ public class Product implements Serializable {
     private ProductCategory productCategory;
 
     @JsonBackReference
-    @OneToOne(mappedBy = "product",
+    @OneToMany(mappedBy = "product",
             cascade = CascadeType.ALL)
-    private Item item;
+    private List<Item> items;
 }

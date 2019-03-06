@@ -2,6 +2,8 @@ package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.ShoppingCartServiceApplication;
 import com.corelogic.sc.requests.AddItemRequest;
+import com.corelogic.sc.requests.DeleteCartRequest;
+import com.corelogic.sc.requests.DeleteItemRequest;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -20,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -136,9 +139,40 @@ public class ItemControllerAcceptanceTest {
                 .andExpect(content().json(TestUtils.readFixture("responses/items-by-cartname.json"), true));
     }
 
-    // TODO - immersion - 2.1
     @Test
     public void item_deletesItem_incrementsProductInventoryCount() throws Exception {
+        String jsonPayload =
+                new ObjectMapper().writeValueAsString(DeleteItemRequest
+                        .builder()
+                        .quantity(1)
+                        .cartName("MyFirstCart")
+                        .skuNumber("IPAD10")
+                        .build());
+
+        mockMvc.perform(delete("/api/items/item")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonPayload))
+                .andExpect(status().isOk())
+                .andExpect(content().json(TestUtils.readFixture("responses/item-delete.json")));
+    }
+
+    @Test
+    public void item_retrieveInvalidItem_throwsItemNotFoundException() throws Exception {
+        String jsonPayload =
+                new ObjectMapper().writeValueAsString(DeleteItemRequest
+                        .builder()
+                        .quantity(1)
+                        .cartName("MyFirstCart")
+                        .skuNumber("InvalidSKUNumber")
+                        .build());
+
+        mockMvc.perform(delete("/api/items/item")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonPayload))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(TestUtils.readFixture("responses/item-notfound.json")));
     }
 
     @Test

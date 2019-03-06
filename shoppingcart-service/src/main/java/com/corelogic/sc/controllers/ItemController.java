@@ -3,6 +3,7 @@ package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
+import com.corelogic.sc.exceptions.ItemNotFoundException;
 import com.corelogic.sc.requests.DeleteItemRequest;
 import com.corelogic.sc.responses.ItemExceptionResponse;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
@@ -35,10 +36,9 @@ public class ItemController {
         return ResponseEntity.ok(itemResponse);
     }
 
-    // TODO - immersion - 2
     @DeleteMapping(value = "/item")
-    public ResponseEntity<ItemResponse> item(@RequestBody DeleteItemRequest deleteItemRequest) throws CartNotFoundException, ProductNotFoundException {
-        return null;
+    public ResponseEntity<ItemResponse> item(@RequestBody DeleteItemRequest deleteItemRequest) throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+        return ResponseEntity.ok(itemService.deleteItem(deleteItemRequest));
     }
 
     @GetMapping(value = "/{cartName}")
@@ -59,6 +59,11 @@ public class ItemController {
 
     @ExceptionHandler(InsufficientProductInventoryException.class)
     public ResponseEntity<ItemExceptionResponse> insufficientProductInventory(InsufficientProductInventoryException exception) {
+        return new ResponseEntity<>(new ItemExceptionResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<ItemExceptionResponse> itemNotFound(ItemNotFoundException exception) {
         return new ResponseEntity<>(new ItemExceptionResponse(exception.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

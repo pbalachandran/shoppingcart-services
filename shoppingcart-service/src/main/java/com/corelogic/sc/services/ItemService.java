@@ -5,6 +5,7 @@ import com.corelogic.sc.entities.Item;
 import com.corelogic.sc.entities.Product;
 import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
+import com.corelogic.sc.exceptions.ItemNotFoundException;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
 import com.corelogic.sc.requests.DeleteItemRequest;
@@ -68,10 +69,50 @@ public class ItemService {
                 .build();
     }
 
-    // TODO - immersion - 2.1
-    // TODO - immersions - 2.1 - add back to product inventory count
-    public ItemResponse deleteItem(DeleteItemRequest deleteItemRequest) throws CartNotFoundException, ProductNotFoundException {
-        return null;
+    public ItemResponse deleteItem(DeleteItemRequest deleteItemRequest) throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+        Item savedItem = itemRepository.findBySkuNumber(deleteItemRequest.getSkuNumber());
+        if (savedItem == null) {
+            throw new ItemNotFoundException("Item " + deleteItemRequest.getSkuNumber() + " was not found");
+        }
+
+        Cart cart = cartRepository.findByCartName(deleteItemRequest.getCartName());
+        if (cart == null) {
+            throw new CartNotFoundException("Cart " + deleteItemRequest.getCartName() + " was not found");
+        }
+
+        Product product = productRepository.findBySkuNumber(deleteItemRequest.getSkuNumber());
+        if (product == null) {
+            throw new ProductNotFoundException("No product exists for sku# " + deleteItemRequest.getSkuNumber());
+        }
+        product.setInventoryCount(product.getInventoryCount() + deleteItemRequest.getQuantity());
+
+        Integer updatedQuantity = savedItem.getQuantity() - deleteItemRequest.getQuantity();
+
+        if (updatedQuantity == 0) {
+            cart.setItems(cart
+                    .getItems()
+                    .stream()
+                    .filter(item -> !item.getItemId().equals(savedItem.getItemId()))
+                    .collect(Collectors.toList()));
+
+            product.setItems(product
+                    .getItems()
+                    .stream()
+                    .filter(item -> !item.getItemId().equals(savedItem.getItemId()))
+                    .collect(Collectors.toList()));
+            itemRepository.delete(savedItem.getItemId());
+        } else {
+            savedItem.setQuantity(updatedQuantity);
+        }
+        productRepository.save(product);
+
+        return ItemResponse
+                .builder()
+                .quantity(deleteItemRequest.getQuantity())
+                .cartName(cart.getCartName())
+                .skuNumber(savedItem.getProduct().getSkuNumber())
+                .price(savedItem.getProduct().getPrice())
+                .build();
     }
 
     public List<ItemResponse> retrieveItems(String cartName) throws CartNotFoundException {
