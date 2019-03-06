@@ -64,9 +64,13 @@ INSERT INTO ITEM (
   sku_number)
 VALUES (current_timestamp, 1, (select cart_name FROM CART where cart_name = 'MyFirstCart'), (select product.sku_number FROM PRODUCT where sku_number = 'IPAD10'));
 
+UPDATE PRODUCT SET inventory_count = 149 WHERE sku_number = 'IPAD10';
+
 INSERT INTO ITEM (
   created_date,
   quantity,
   cart_name,
   sku_number)
 VALUES (current_timestamp, 1, (select cart_name FROM CART where cart_name = 'MyFirstCart'), (select product.sku_number FROM PRODUCT where sku_number = 'TOROMOWER567'));
+
+UPDATE PRODUCT SET inventory_count = 149 WHERE sku_number = 'TOROMOWER567';

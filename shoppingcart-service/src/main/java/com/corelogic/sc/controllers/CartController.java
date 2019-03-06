@@ -2,6 +2,8 @@ package com.corelogic.sc.controllers;
 
 
 import com.corelogic.sc.exceptions.CartNotFoundException;
+import com.corelogic.sc.exceptions.ItemNotFoundException;
+import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddCartRequest;
 import com.corelogic.sc.requests.DeleteCartRequest;
 import com.corelogic.sc.responses.CartExceptionResponse;
@@ -33,9 +35,8 @@ public class CartController {
         return ResponseEntity.ok(cartService.findCart(cartName));
     }
 
-    // TODO - immersion - 1
     @DeleteMapping(value = "/cart")
-    public ResponseEntity cart(@RequestBody DeleteCartRequest deleteCartRequest) throws CartNotFoundException {
+    public ResponseEntity cart(@RequestBody DeleteCartRequest deleteCartRequest) throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
         cartService.deleteCart(deleteCartRequest);
         return new ResponseEntity(HttpStatus.OK);
     }

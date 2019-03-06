@@ -93,7 +93,7 @@ public class DbController {
                 .skuNumber("IPAD10")
                 .productName("iPad 10")
                 .description("Apple iPad 10")
-                .inventoryCount(150)
+                .inventoryCount(149)
                 .price(799.99)
                 .productCategory(productCategoryRepository.findByProductCategoryName("Electronics"))
                 .build();
@@ -104,7 +104,7 @@ public class DbController {
                 .skuNumber("TOROMOWER567")
                 .productName("Toro Mower 567")
                 .description("Toro Mower 567")
-                .inventoryCount(150)
+                .inventoryCount(149)
                 .price(1299.99)
                 .productCategory(productCategoryRepository.findByProductCategoryName("Lawn & Garden"))
                 .build();

@@ -18,8 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.client.RestTemplate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -124,7 +122,7 @@ public class CartControllerAcceptanceTest {
     }
 
     @Test
-    public void cart_deleteCartByName_deletesCart() throws Exception{
+    public void cart_deleteCartByName_deletesCart() throws Exception {
         String jsonPayload =
                 new ObjectMapper().writeValueAsString(DeleteCartRequest
                         .builder()
@@ -138,20 +136,43 @@ public class CartControllerAcceptanceTest {
                 .andExpect(status().isOk());
     }
 
-    // TODO - immersion - 1.1 - test transitive item deletion
     @Test
     public void cart_deleteCartByName_deletesCart_deletesItemsInCart() throws Exception {
+        String jsonPayload =
+                new ObjectMapper().writeValueAsString(DeleteCartRequest
+                        .builder()
+                        .cartName("MyFirstCart")
+                        .build());
 
+        mockMvc.perform(delete("/api/carts/cart")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonPayload))
+                .andExpect(status().isOk());
     }
 
-    // TODO - immersion - 1.1 - test adjustment of product inventory count
     @Test
     public void cart_deleteCartByName_deletesCart_incrementsProductInventoryCount() throws Exception {
+        String jsonPayload =
+                new ObjectMapper().writeValueAsString(DeleteCartRequest
+                        .builder()
+                        .cartName("MyFirstCart")
+                        .build());
 
+        mockMvc.perform(delete("/api/carts/cart")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonPayload))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/products/product/IPAD10")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(TestUtils.readFixture("responses/product-by-sku-itemdelete.json")));
     }
 
     @Test
-    public void cart_deleteCartByInvalidCartName_throwsCartNotFoundException() throws Exception{
+    public void cart_deleteCartByInvalidCartName_throwsCartNotFoundException() throws Exception {
         String jsonPayload =
                 new ObjectMapper().writeValueAsString(DeleteCartRequest
                         .builder()
