@@ -13,6 +13,6 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findItemsByCart(Cart cart);
 
-    @Query("SELECT item FROM Item item WHERE item.product.skuNumber = :skuNumber")
-    Item findBySkuNumber(@Param("skuNumber") String skuNumber);
+    @Query("SELECT item FROM Item item WHERE item.cart.cartName = :cartName")
+    List<Item> findByCartName(@Param("cartName") String cartName);
 }

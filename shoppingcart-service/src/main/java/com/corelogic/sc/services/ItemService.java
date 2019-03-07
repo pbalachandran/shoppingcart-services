@@ -70,7 +70,14 @@ public class ItemService {
     }
 
     public ItemResponse deleteItem(DeleteItemRequest deleteItemRequest) throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
-        Item savedItem = itemRepository.findBySkuNumber(deleteItemRequest.getSkuNumber());
+        List<Item> savedItems = itemRepository.findByCartName(deleteItemRequest.getCartName());
+        if (savedItems == null || savedItems.isEmpty()) {
+            throw new ItemNotFoundException("Item " + deleteItemRequest.getSkuNumber() + " was not found");
+        }
+
+        Item savedItem = savedItems.stream().filter(item ->
+                item.getProduct().getSkuNumber().equals(deleteItemRequest.getSkuNumber())).findFirst().orElse(null);
+
         if (savedItem == null) {
             throw new ItemNotFoundException("Item " + deleteItemRequest.getSkuNumber() + " was not found");
         }

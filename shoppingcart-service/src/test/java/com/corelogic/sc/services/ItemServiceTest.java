@@ -232,7 +232,7 @@ public class ItemServiceTest {
                 .quantity(3)
                 .createdDate(now)
                 .build();
-        when(mockItemRepository.findBySkuNumber("22")).thenReturn(savedItemWithQuantity);
+        when(mockItemRepository.findByCartName("MyFirstCart")).thenReturn(Collections.singletonList(savedItemWithQuantity));
 
         Cart savedCartWithItems = Cart
                 .builder()
@@ -291,7 +291,7 @@ public class ItemServiceTest {
                 .price(799.99)
                 .build();
 
-        verify(mockItemRepository).findBySkuNumber("22");
+        verify(mockItemRepository).findByCartName("MyFirstCart");
         verify(mockCartRepository).findByCartName("MyFirstCart");
         verify(mockProductRepository).findBySkuNumber("22");
         verify(mockProductRepository).save(savedProductIncrementQuantity);
@@ -308,7 +308,7 @@ public class ItemServiceTest {
                 .quantity(1)
                 .createdDate(now)
                 .build();
-        when(mockItemRepository.findBySkuNumber("22")).thenReturn(savedItemWithQuantity);
+        when(mockItemRepository.findByCartName("MyFirstCart")).thenReturn(Collections.singletonList(savedItemWithQuantity));
 
         Cart savedCartWithItems = Cart
                 .builder()
@@ -362,7 +362,7 @@ public class ItemServiceTest {
                 .price(799.99)
                 .build();
 
-        verify(mockItemRepository).findBySkuNumber("22");
+        verify(mockItemRepository).findByCartName("MyFirstCart");
         verify(mockCartRepository).findByCartName("MyFirstCart");
         verify(mockProductRepository).findBySkuNumber("22");
         verify(mockItemRepository).delete(1L);
@@ -380,7 +380,7 @@ public class ItemServiceTest {
                 .quantity(3)
                 .createdDate(now)
                 .build();
-        when(mockItemRepository.findBySkuNumber("22")).thenReturn(savedItemWithQuantity);
+        when(mockItemRepository.findByCartName("MyFirstCart")).thenReturn(Collections.singletonList(savedItemWithQuantity));
 
         Cart savedCartWithItems = Cart
                 .builder()

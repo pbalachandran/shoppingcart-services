@@ -2,7 +2,6 @@ package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.ShoppingCartServiceApplication;
 import com.corelogic.sc.requests.AddItemRequest;
-import com.corelogic.sc.requests.DeleteCartRequest;
 import com.corelogic.sc.requests.DeleteItemRequest;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -155,6 +154,11 @@ public class ItemControllerAcceptanceTest {
                 .content(jsonPayload))
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.readFixture("responses/item-delete.json")));
+
+        mockMvc.perform(get("/api/products/product/IPAD10")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(TestUtils.readFixture("responses/product-by-sku-itemdelete.json")));
     }
 
     @Test
