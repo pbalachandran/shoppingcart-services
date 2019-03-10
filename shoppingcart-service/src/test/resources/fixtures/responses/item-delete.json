@@ -1,6 +1,6 @@
 {
   "quantity": 1,
-  "status": "PRODUCT_ACTIVE",
+  "status": "ITEM_DELETED",
   "cartName": "MyFirstCart",
   "skuNumber": "IPAD10",
   "price": 799.99

@@ -58,7 +58,7 @@ public class ItemService {
                 .cart(cart)
                 .product(product)
                 .quantity(addItemRequest.getQuantity())
-                .status(ItemStatus.PRODUCT_ACTIVE.name())
+                .status(ItemStatus.ITEM_ACTIVE.name())
                 .createdDate(LocalDateTime.now())
                 .build());
 
@@ -119,7 +119,7 @@ public class ItemService {
         return ItemResponse
                 .builder()
                 .quantity(deleteItemRequest.getQuantity())
-                .status(ItemStatus.getItemStatus(savedItem.getStatus()))
+                .status(ItemStatus.ITEM_DELETED)
                 .cartName(cart.getCartName())
                 .skuNumber(savedItem.getProduct().getSkuNumber())
                 .price(savedItem.getProduct().getPrice())

@@ -1,14 +1,14 @@
 [
   {
     "quantity": 1,
-    "status": "PRODUCT_ACTIVE",
+    "status": "ITEM_ACTIVE",
     "cartName": "MyFirstCart",
     "skuNumber": "IPAD10",
     "price": 799.99
   },
   {
     "quantity": 1,
-    "status": "PRODUCT_ACTIVE",
+    "status": "ITEM_ACTIVE",
     "cartName": "MyFirstCart",
     "skuNumber": "TOROMOWER567",
     "price": 1299.99
