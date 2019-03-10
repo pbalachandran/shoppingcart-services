@@ -3,7 +3,6 @@ package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.exceptions.ProductCategoryNotFoundException;
 import com.corelogic.sc.requests.AddProductCategoryRequest;
-import com.corelogic.sc.requests.DeleteProductCategoryRequest;
 import com.corelogic.sc.responses.ProductCategoryExceptionResponse;
 import com.corelogic.sc.responses.ProductCategoryResponse;
 import com.corelogic.sc.services.ProductCategoryService;

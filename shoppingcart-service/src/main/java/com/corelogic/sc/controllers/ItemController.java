@@ -4,11 +4,10 @@ package com.corelogic.sc.controllers;
 import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
 import com.corelogic.sc.exceptions.ItemNotFoundException;
-import com.corelogic.sc.requests.DeleteItemRequest;
+import com.corelogic.sc.requests.RemoveItemFromCartRequest;
 import com.corelogic.sc.responses.ItemExceptionResponse;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
-import com.corelogic.sc.responses.CartResponse;
 import com.corelogic.sc.responses.ItemResponse;
 import com.corelogic.sc.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,8 @@ public class ItemController {
     }
 
     @DeleteMapping(value = "/item")
-    public ResponseEntity<ItemResponse> item(@RequestBody DeleteItemRequest deleteItemRequest) throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
-        return ResponseEntity.ok(itemService.deleteItem(deleteItemRequest));
+    public ResponseEntity<ItemResponse> item(@RequestBody RemoveItemFromCartRequest removeItemFromCartRequest) throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+        return ResponseEntity.ok(itemService.removeItem(removeItemFromCartRequest));
     }
 
     @GetMapping(value = "/{cartName}")

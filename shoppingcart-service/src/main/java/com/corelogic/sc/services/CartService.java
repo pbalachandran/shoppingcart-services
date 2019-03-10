@@ -7,7 +7,7 @@ import com.corelogic.sc.exceptions.ItemNotFoundException;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddCartRequest;
 import com.corelogic.sc.requests.DeleteCartRequest;
-import com.corelogic.sc.requests.DeleteItemRequest;
+import com.corelogic.sc.requests.RemoveItemFromCartRequest;
 import com.corelogic.sc.responses.CartResponse;
 import com.corelogic.sc.responses.CartStatus;
 import com.corelogic.sc.respositories.CartRepository;
@@ -63,7 +63,7 @@ public class CartService {
             throw new CartNotFoundException("Cart " + deleteCartRequest.getCartName() + " was not found");
         }
         for (Item item : cart.getItems()) {
-            itemService.deleteItem(DeleteItemRequest.builder()
+            itemService.removeItem(RemoveItemFromCartRequest.builder()
                     .skuNumber(item.getProduct().getSkuNumber())
                     .quantity(item.getQuantity())
                     .cartName(cart.getCartName())

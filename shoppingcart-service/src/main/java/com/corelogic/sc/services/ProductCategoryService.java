@@ -3,7 +3,6 @@ package com.corelogic.sc.services;
 import com.corelogic.sc.entities.ProductCategory;
 import com.corelogic.sc.exceptions.ProductCategoryNotFoundException;
 import com.corelogic.sc.requests.AddProductCategoryRequest;
-import com.corelogic.sc.requests.DeleteProductCategoryRequest;
 import com.corelogic.sc.responses.ProductCategoryResponse;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.ShoppingCartServiceApplication;
 import com.corelogic.sc.requests.AddItemRequest;
-import com.corelogic.sc.requests.DeleteItemRequest;
+import com.corelogic.sc.requests.RemoveItemFromCartRequest;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -139,9 +139,9 @@ public class ItemControllerAcceptanceTest {
     }
 
     @Test
-    public void item_deletesItem_incrementsProductInventoryCount() throws Exception {
+    public void item_removesItem_incrementsProductInventoryCount() throws Exception {
         String jsonPayload =
-                new ObjectMapper().writeValueAsString(DeleteItemRequest
+                new ObjectMapper().writeValueAsString(RemoveItemFromCartRequest
                         .builder()
                         .quantity(1)
                         .cartName("MyFirstCart")
@@ -153,18 +153,18 @@ public class ItemControllerAcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonPayload))
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.readFixture("responses/item-delete.json")));
+                .andExpect(content().json(TestUtils.readFixture("responses/item-remove.json")));
 
         mockMvc.perform(get("/api/products/product/IPAD10")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(TestUtils.readFixture("responses/product-by-sku-itemdelete.json")));
+                .andExpect(content().json(TestUtils.readFixture("responses/product-by-sku-item-remove.json")));
     }
 
     @Test
     public void item_retrieveInvalidItem_throwsItemNotFoundException() throws Exception {
         String jsonPayload =
-                new ObjectMapper().writeValueAsString(DeleteItemRequest
+                new ObjectMapper().writeValueAsString(RemoveItemFromCartRequest
                         .builder()
                         .quantity(1)
                         .cartName("MyFirstCart")

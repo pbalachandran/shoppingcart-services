@@ -9,7 +9,7 @@ import com.corelogic.sc.exceptions.ItemNotFoundException;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddCartRequest;
 import com.corelogic.sc.requests.DeleteCartRequest;
-import com.corelogic.sc.requests.DeleteItemRequest;
+import com.corelogic.sc.requests.RemoveItemFromCartRequest;
 import com.corelogic.sc.responses.CartResponse;
 import com.corelogic.sc.responses.CartStatus;
 import com.corelogic.sc.responses.ItemResponse;
@@ -139,13 +139,13 @@ public class CartServiceTest {
                 .build();
         when(mockCartRepository.findByCartName("MyFirstCart")).thenReturn(savedCart);
 
-        DeleteItemRequest deleteItemRequest = DeleteItemRequest
+        RemoveItemFromCartRequest removeItemFromCartRequest = RemoveItemFromCartRequest
                 .builder()
                 .cartName("MyFirstCart")
                 .quantity(1)
                 .skuNumber("IPAD10")
                 .build();
-        when(mockItemService.deleteItem(deleteItemRequest)).thenReturn(ItemResponse.builder().build());
+        when(mockItemService.removeItem(removeItemFromCartRequest)).thenReturn(ItemResponse.builder().build());
 
         doNothing().when(mockCartRepository).delete("MyFirstCart");
 
@@ -154,7 +154,7 @@ public class CartServiceTest {
                 .cartName("MyFirstCart")
                 .build());
 
-        verify(mockItemService).deleteItem(DeleteItemRequest
+        verify(mockItemService).removeItem(RemoveItemFromCartRequest
                 .builder()
                 .cartName("MyFirstCart")
                 .quantity(1)

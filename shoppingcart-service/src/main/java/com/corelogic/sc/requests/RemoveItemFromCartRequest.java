@@ -7,6 +7,10 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class DeleteItemRequest {
+public class RemoveItemFromCartRequest {
+    private Integer quantity;
+
+    private String cartName;
+
     private String skuNumber;
 }

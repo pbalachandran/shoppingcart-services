@@ -8,7 +8,7 @@ import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
 import com.corelogic.sc.exceptions.ItemNotFoundException;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
-import com.corelogic.sc.requests.DeleteItemRequest;
+import com.corelogic.sc.requests.RemoveItemFromCartRequest;
 import com.corelogic.sc.responses.ItemResponse;
 import com.corelogic.sc.responses.ItemStatus;
 import com.corelogic.sc.respositories.CartRepository;
@@ -72,31 +72,31 @@ public class ItemService {
                 .build();
     }
 
-    public ItemResponse deleteItem(DeleteItemRequest deleteItemRequest) throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
-        List<Item> savedItems = itemRepository.findByCartName(deleteItemRequest.getCartName());
+    public ItemResponse removeItem(RemoveItemFromCartRequest removeItemFromCartRequest) throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+        List<Item> savedItems = itemRepository.findByCartName(removeItemFromCartRequest.getCartName());
         if (savedItems == null || savedItems.isEmpty()) {
-            throw new ItemNotFoundException("Item " + deleteItemRequest.getSkuNumber() + " was not found");
+            throw new ItemNotFoundException("Item " + removeItemFromCartRequest.getSkuNumber() + " was not found");
         }
 
         Item savedItem = savedItems.stream().filter(item ->
-                item.getProduct().getSkuNumber().equals(deleteItemRequest.getSkuNumber())).findFirst().orElse(null);
+                item.getProduct().getSkuNumber().equals(removeItemFromCartRequest.getSkuNumber())).findFirst().orElse(null);
 
         if (savedItem == null) {
-            throw new ItemNotFoundException("Item " + deleteItemRequest.getSkuNumber() + " was not found");
+            throw new ItemNotFoundException("Item " + removeItemFromCartRequest.getSkuNumber() + " was not found");
         }
 
-        Cart cart = cartRepository.findByCartName(deleteItemRequest.getCartName());
+        Cart cart = cartRepository.findByCartName(removeItemFromCartRequest.getCartName());
         if (cart == null) {
-            throw new CartNotFoundException("Cart " + deleteItemRequest.getCartName() + " was not found");
+            throw new CartNotFoundException("Cart " + removeItemFromCartRequest.getCartName() + " was not found");
         }
 
-        Product product = productRepository.findBySkuNumber(deleteItemRequest.getSkuNumber());
+        Product product = productRepository.findBySkuNumber(removeItemFromCartRequest.getSkuNumber());
         if (product == null) {
-            throw new ProductNotFoundException("No product exists for sku# " + deleteItemRequest.getSkuNumber());
+            throw new ProductNotFoundException("No product exists for sku# " + removeItemFromCartRequest.getSkuNumber());
         }
-        product.setInventoryCount(product.getInventoryCount() + deleteItemRequest.getQuantity());
+        product.setInventoryCount(product.getInventoryCount() + removeItemFromCartRequest.getQuantity());
 
-        Integer updatedQuantity = savedItem.getQuantity() - deleteItemRequest.getQuantity();
+        Integer updatedQuantity = savedItem.getQuantity() - removeItemFromCartRequest.getQuantity();
 
         if (updatedQuantity == 0) {
             cart.setItems(cart
@@ -118,8 +118,8 @@ public class ItemService {
 
         return ItemResponse
                 .builder()
-                .quantity(deleteItemRequest.getQuantity())
-                .status(ItemStatus.ITEM_DELETED)
+                .quantity(removeItemFromCartRequest.getQuantity())
+                .status(ItemStatus.ITEM_REMOVED)
                 .cartName(cart.getCartName())
                 .skuNumber(savedItem.getProduct().getSkuNumber())
                 .price(savedItem.getProduct().getPrice())

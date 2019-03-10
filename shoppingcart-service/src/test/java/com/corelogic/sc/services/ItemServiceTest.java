@@ -9,7 +9,7 @@ import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
 import com.corelogic.sc.exceptions.ItemNotFoundException;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
-import com.corelogic.sc.requests.DeleteItemRequest;
+import com.corelogic.sc.requests.RemoveItemFromCartRequest;
 import com.corelogic.sc.responses.ItemResponse;
 import com.corelogic.sc.responses.ItemStatus;
 import com.corelogic.sc.respositories.CartRepository;
@@ -229,7 +229,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void deleteItem_whenQuantityDeletedIsLessThanItemQuantity_updatesQuantity() throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+    public void removeItem_whenQuantityReducedIsLessThanItemQuantity_updatesQuantity() throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
         Item savedItemWithQuantity = Item
                 .builder()
                 .itemId(1L)
@@ -284,7 +284,7 @@ public class ItemServiceTest {
                 .build();
         when(mockProductRepository.save(savedProductIncrementQuantity)).thenReturn(savedProductIncrementQuantity);
 
-        ItemResponse actual = subject.deleteItem(DeleteItemRequest
+        ItemResponse actual = subject.removeItem(RemoveItemFromCartRequest
                 .builder()
                 .skuNumber("22")
                 .quantity(1)
@@ -296,7 +296,7 @@ public class ItemServiceTest {
                 .cartName("MyFirstCart")
                 .skuNumber("22")
                 .quantity(1)
-                .status(ItemStatus.ITEM_DELETED)
+                .status(ItemStatus.ITEM_REMOVED)
                 .price(799.99)
                 .build();
 
@@ -308,7 +308,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void deleteItem_whenQuantityDeletedIsEqualToItemQuantity_deleteItem() throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+    public void removeItem_whenQuantityReducedIsEqualToItemQuantity_removeItem() throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
         Item savedItemWithQuantity = Item
                 .builder()
                 .itemId(1L)
@@ -357,7 +357,7 @@ public class ItemServiceTest {
                 .build();
         when(mockProductRepository.save(savedProductOriginalQuantity)).thenReturn(savedProductOriginalQuantity);
 
-        ItemResponse actual = subject.deleteItem(DeleteItemRequest
+        ItemResponse actual = subject.removeItem(RemoveItemFromCartRequest
                 .builder()
                 .skuNumber("22")
                 .quantity(1)
@@ -369,7 +369,7 @@ public class ItemServiceTest {
                 .cartName("MyFirstCart")
                 .skuNumber("22")
                 .quantity(1)
-                .status(ItemStatus.ITEM_DELETED)
+                .status(ItemStatus.ITEM_REMOVED)
                 .price(799.99)
                 .build();
 
@@ -382,7 +382,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void deleteItem_validateProductQuantity() throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
+    public void removeItem_validateProductQuantity() throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
         Item savedItemWithQuantity = Item
                 .builder()
                 .itemId(1L)
@@ -437,7 +437,7 @@ public class ItemServiceTest {
                 .build();
         when(mockProductRepository.save(savedProductIncrementQuantity)).thenReturn(savedProductIncrementQuantity);
 
-        subject.deleteItem(DeleteItemRequest
+        subject.removeItem(RemoveItemFromCartRequest
                 .builder()
                 .skuNumber("22")
                 .quantity(1)
@@ -449,10 +449,10 @@ public class ItemServiceTest {
     }
 
     @Test(expected = ItemNotFoundException.class)
-    public void deleteItem_whenItemIsNotFound_throwsItemNotFoundException()
+    public void removeItem_whenItemIsNotFound_throwsItemNotFoundException()
             throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
 
-        subject.deleteItem(DeleteItemRequest
+        subject.removeItem(RemoveItemFromCartRequest
                 .builder()
                 .skuNumber("InvalidItemSKU")
                 .quantity(1)
