@@ -10,7 +10,7 @@
 * ProductCategory creation
 * Product creation
 * Cart creation, retrieval & deletion
-* Item creation, addition/deletion to/from cart
+* Item creation, addition/removal/deletion to/from cart
 * Insufficient product inventory
 * TODO
     * User management and association with a cart
