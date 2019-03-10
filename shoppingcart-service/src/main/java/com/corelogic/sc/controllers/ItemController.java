@@ -4,6 +4,7 @@ package com.corelogic.sc.controllers;
 import com.corelogic.sc.exceptions.CartNotFoundException;
 import com.corelogic.sc.exceptions.InsufficientProductInventoryException;
 import com.corelogic.sc.exceptions.ItemNotFoundException;
+import com.corelogic.sc.requests.DeleteItemRequest;
 import com.corelogic.sc.requests.RemoveItemFromCartRequest;
 import com.corelogic.sc.responses.ItemExceptionResponse;
 import com.corelogic.sc.exceptions.ProductNotFoundException;
@@ -35,7 +36,7 @@ public class ItemController {
         return ResponseEntity.ok(itemResponse);
     }
 
-    @DeleteMapping(value = "/item")
+    @PostMapping(value = "/cart/item")
     public ResponseEntity<ItemResponse> item(@RequestBody RemoveItemFromCartRequest removeItemFromCartRequest) throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
         return ResponseEntity.ok(itemService.removeItem(removeItemFromCartRequest));
     }

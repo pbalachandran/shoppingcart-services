@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -139,7 +138,7 @@ public class ItemControllerAcceptanceTest {
     }
 
     @Test
-    public void item_removesItem_incrementsProductInventoryCount() throws Exception {
+    public void item_removesItemFromCart_incrementsProductInventoryCount() throws Exception {
         String jsonPayload =
                 new ObjectMapper().writeValueAsString(RemoveItemFromCartRequest
                         .builder()
@@ -148,7 +147,7 @@ public class ItemControllerAcceptanceTest {
                         .skuNumber("IPAD10")
                         .build());
 
-        mockMvc.perform(delete("/api/items/item")
+        mockMvc.perform(post("/api/items/cart/item")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonPayload))
@@ -162,7 +161,7 @@ public class ItemControllerAcceptanceTest {
     }
 
     @Test
-    public void item_retrieveInvalidItem_throwsItemNotFoundException() throws Exception {
+    public void item_retrieveInvalidItemFromCart_throwsItemNotFoundException() throws Exception {
         String jsonPayload =
                 new ObjectMapper().writeValueAsString(RemoveItemFromCartRequest
                         .builder()
@@ -171,7 +170,7 @@ public class ItemControllerAcceptanceTest {
                         .skuNumber("InvalidSKUNumber")
                         .build());
 
-        mockMvc.perform(delete("/api/items/item")
+        mockMvc.perform(post("/api/items/cart/item")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonPayload))
