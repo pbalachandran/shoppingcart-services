@@ -14,7 +14,6 @@ import com.corelogic.sc.responses.CartResponse;
 import com.corelogic.sc.responses.CartStatus;
 import com.corelogic.sc.responses.ItemResponse;
 import com.corelogic.sc.respositories.CartRepository;
-import org.hibernate.sql.Delete;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -11,6 +11,7 @@ import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
 import com.corelogic.sc.requests.DeleteItemRequest;
 import com.corelogic.sc.responses.ItemResponse;
+import com.corelogic.sc.responses.ItemStatus;
 import com.corelogic.sc.respositories.CartRepository;
 import com.corelogic.sc.respositories.ItemRepository;
 import com.corelogic.sc.respositories.ProductRepository;
@@ -120,6 +121,7 @@ public class ItemServiceTest {
                 .cart(savedCart)
                 .product(savedProduct1)
                 .quantity(2)
+                .status(ItemStatus.PRODUCT_ACTIVE.name())
                 .createdDate(now)
                 .build();
 
@@ -129,6 +131,7 @@ public class ItemServiceTest {
                 .builder()
                 .itemId(1L)
                 .quantity(1)
+                .status(ItemStatus.PRODUCT_ACTIVE.name())
                 .product(savedProduct1)
                 .cart(savedCart)
                 .createdDate(now)
@@ -138,6 +141,7 @@ public class ItemServiceTest {
                 .builder()
                 .itemId(2L)
                 .quantity(2)
+                .status(ItemStatus.PRODUCT_ACTIVE.name())
                 .product(savedProduct2)
                 .cart(savedCart)
                 .createdDate(now)
@@ -183,6 +187,7 @@ public class ItemServiceTest {
                 .skuNumber("22")
                 .price(799.99)
                 .quantity(2)
+                .status(ItemStatus.PRODUCT_ACTIVE)
                 .build();
 
         verify(mockItemRepository).save(Item
@@ -190,6 +195,7 @@ public class ItemServiceTest {
                 .cart(savedCart)
                 .product(savedProduct1)
                 .quantity(2)
+                .status(ItemStatus.PRODUCT_ACTIVE.name())
                 .createdDate(any(LocalDateTime.class))
                 .build());
 
@@ -230,6 +236,7 @@ public class ItemServiceTest {
                 .cart(savedCart)
                 .product(savedProduct1)
                 .quantity(3)
+                .status(ItemStatus.PRODUCT_ACTIVE.name())
                 .createdDate(now)
                 .build();
         when(mockItemRepository.findByCartName("MyFirstCart")).thenReturn(Collections.singletonList(savedItemWithQuantity));
@@ -270,6 +277,7 @@ public class ItemServiceTest {
                         .cart(savedCart)
                         .product(savedProduct1)
                         .quantity(2)
+                        .status(ItemStatus.PRODUCT_ACTIVE.name())
                         .createdDate(now)
                         .build()))
                 .createdDate(now)
@@ -288,6 +296,7 @@ public class ItemServiceTest {
                 .cartName("MyFirstCart")
                 .skuNumber("22")
                 .quantity(1)
+                .status(ItemStatus.PRODUCT_ACTIVE)
                 .price(799.99)
                 .build();
 
@@ -306,6 +315,7 @@ public class ItemServiceTest {
                 .cart(savedCart)
                 .product(savedProduct1)
                 .quantity(1)
+                .status(ItemStatus.PRODUCT_ACTIVE.name())
                 .createdDate(now)
                 .build();
         when(mockItemRepository.findByCartName("MyFirstCart")).thenReturn(Collections.singletonList(savedItemWithQuantity));
@@ -359,6 +369,7 @@ public class ItemServiceTest {
                 .cartName("MyFirstCart")
                 .skuNumber("22")
                 .quantity(1)
+                .status(ItemStatus.PRODUCT_ACTIVE)
                 .price(799.99)
                 .build();
 
@@ -378,6 +389,7 @@ public class ItemServiceTest {
                 .cart(savedCart)
                 .product(savedProduct1)
                 .quantity(3)
+                .status(ItemStatus.PRODUCT_ACTIVE.name())
                 .createdDate(now)
                 .build();
         when(mockItemRepository.findByCartName("MyFirstCart")).thenReturn(Collections.singletonList(savedItemWithQuantity));
@@ -418,6 +430,7 @@ public class ItemServiceTest {
                         .cart(savedCart)
                         .product(savedProduct1)
                         .quantity(2)
+                        .status(ItemStatus.PRODUCT_ACTIVE.name())
                         .createdDate(now)
                         .build()))
                 .createdDate(now)
@@ -485,6 +498,7 @@ public class ItemServiceTest {
                         .cartName("MyFirstCart")
                         .skuNumber("22")
                         .quantity(1)
+                        .status(ItemStatus.PRODUCT_ACTIVE)
                         .price(799.99)
                         .build(),
                 ItemResponse
@@ -492,6 +506,7 @@ public class ItemServiceTest {
                         .cartName("MyFirstCart")
                         .skuNumber("24")
                         .quantity(2)
+                        .status(ItemStatus.PRODUCT_ACTIVE)
                         .price(899.99)
                         .build());
         assertEquals(expected, actual);

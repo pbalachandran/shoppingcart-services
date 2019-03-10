@@ -10,6 +10,7 @@ import com.corelogic.sc.exceptions.ProductNotFoundException;
 import com.corelogic.sc.requests.AddItemRequest;
 import com.corelogic.sc.requests.DeleteItemRequest;
 import com.corelogic.sc.responses.ItemResponse;
+import com.corelogic.sc.responses.ItemStatus;
 import com.corelogic.sc.respositories.CartRepository;
 import com.corelogic.sc.respositories.ItemRepository;
 import com.corelogic.sc.respositories.ProductRepository;
@@ -57,12 +58,14 @@ public class ItemService {
                 .cart(cart)
                 .product(product)
                 .quantity(addItemRequest.getQuantity())
+                .status(ItemStatus.PRODUCT_ACTIVE.name())
                 .createdDate(LocalDateTime.now())
                 .build());
 
         return ItemResponse
                 .builder()
                 .quantity(item.getQuantity())
+                .status(ItemStatus.getItemStatus(item.getStatus()))
                 .cartName(cart.getCartName())
                 .skuNumber(item.getProduct().getSkuNumber())
                 .price(item.getProduct().getPrice())
@@ -116,6 +119,7 @@ public class ItemService {
         return ItemResponse
                 .builder()
                 .quantity(deleteItemRequest.getQuantity())
+                .status(ItemStatus.getItemStatus(savedItem.getStatus()))
                 .cartName(cart.getCartName())
                 .skuNumber(savedItem.getProduct().getSkuNumber())
                 .price(savedItem.getProduct().getPrice())
@@ -133,6 +137,7 @@ public class ItemService {
                 .builder()
                 .price(item.getProduct().getPrice())
                 .quantity(item.getQuantity())
+                .status(ItemStatus.getItemStatus(item.getStatus()))
                 .skuNumber(item.getProduct().getSkuNumber())
                 .cartName(item.getCart().getCartName())
                 .build()).collect(Collectors.toList());

@@ -93,4 +93,9 @@ public class ProductControllerAcceptanceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(TestUtils.readFixture("responses/product-add.json")));
     }
+
+    // TODO: immersion - 1.1
+    @Test
+    public void product_deleteProduct() {
+    }
 }

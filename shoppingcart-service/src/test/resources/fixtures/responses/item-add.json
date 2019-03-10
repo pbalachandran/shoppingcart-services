@@ -1,5 +1,6 @@
 {
   "quantity": 2,
+  "status": "PRODUCT_ACTIVE",
   "cartName": "MyFirstCart",
   "skuNumber": "IPHONE8S",
   "price": 799.99

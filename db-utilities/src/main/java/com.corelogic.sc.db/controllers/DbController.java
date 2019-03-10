@@ -123,6 +123,7 @@ public class DbController {
                 .builder()
                 .createdDate(now)
                 .quantity(1)
+                .status("PRODUCT_ACTIVE")
                 .cart(cartRepository.findByCartName("MyFirstCart"))
                 .product(productRepository.findBySkuNumber("IPAD10"))
                 .build();
@@ -131,6 +132,7 @@ public class DbController {
                 .builder()
                 .createdDate(now)
                 .quantity(1)
+                .status("PRODUCT_ACTIVE")
                 .cart(cartRepository.findByCartName("MyFirstCart"))
                 .product(productRepository.findBySkuNumber("TOROMOWER567"))
                 .build();

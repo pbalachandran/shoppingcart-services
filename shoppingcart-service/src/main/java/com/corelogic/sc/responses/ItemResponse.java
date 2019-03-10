@@ -11,6 +11,8 @@ public class ItemResponse {
 
     private Integer quantity;
 
+    private ItemStatus status;
+
     private String cartName;
 
     private String skuNumber;
