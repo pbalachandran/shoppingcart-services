@@ -122,21 +122,6 @@ public class CartControllerAcceptanceTest {
     }
 
     @Test
-    public void cart_deleteCartByName_deletesCart() throws Exception {
-        String jsonPayload =
-                new ObjectMapper().writeValueAsString(DeleteCartRequest
-                        .builder()
-                        .cartName("MyFirstCart")
-                        .build());
-
-        mockMvc.perform(delete("/api/carts/cart")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonPayload))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     public void cart_deleteCartByName_deletesCart_removesItemsInCart() throws Exception {
         String jsonPayload =
                 new ObjectMapper().writeValueAsString(DeleteCartRequest
