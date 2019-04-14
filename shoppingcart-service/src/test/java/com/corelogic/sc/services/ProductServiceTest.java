@@ -197,14 +197,4 @@ public class ProductServiceTest {
                 .build();
         assertEquals(expected, actual);
     }
-
-    // TODO: immersion - 1.3
-    @Test
-    public void deleteProduct_deletesItemsCreatedFromProduct_updatesItemStatusToBeReflectedInCart() {
-    }
-
-    // TODO: immersion - 1.4
-    @Test
-    public void deleteProduct_deletesProductFromProductCategory() {
-    }
 }

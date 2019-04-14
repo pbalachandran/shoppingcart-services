@@ -80,13 +80,4 @@ public class ProductService {
                 .price(product.getPrice())
                 .build();
     }
-
-    // TODO - immersion 1.2
-    // Finds all items that are instances of this product
-    // Finds all carts that have the above items
-    // Deletes the items from cart, setting right status
-    // Deletes the product
-    public ProductResponse deleteProduct(DeleteProductRequest deleteProductRequest) {
-        return null;
-    }
 }
