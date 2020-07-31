@@ -110,7 +110,7 @@ public class ItemService {
                     .stream()
                     .filter(item -> !item.getItemId().equals(savedItem.getItemId()))
                     .collect(Collectors.toList()));
-            itemRepository.delete(savedItem.getItemId());
+            itemRepository.deleteById(savedItem.getItemId());
         } else {
             savedItem.setQuantity(updatedQuantity);
         }

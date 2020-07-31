@@ -69,6 +69,6 @@ public class CartService {
                     .cartName(cart.getCartName())
                     .build());
         }
-        cartRepository.delete(deleteCartRequest.getCartName());
+        cartRepository.deleteById(deleteCartRequest.getCartName());
     }
 }

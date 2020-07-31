@@ -63,7 +63,7 @@ public class DbController {
                 .productCategoryName("Lawn & Garden")
                 .description("Lawn & Garden Equipment")
                 .build();
-        productCategoryRepository.save(Arrays.asList(electronics, lawnAndGarden));
+        productCategoryRepository.saveAll(Arrays.asList(electronics, lawnAndGarden));
 
         Product iphone8s = Product
                 .builder()
@@ -108,7 +108,7 @@ public class DbController {
                 .price(1299.99)
                 .productCategory(productCategoryRepository.findByProductCategoryName("Lawn & Garden"))
                 .build();
-        productRepository.save(Arrays.asList(iphone8s, iphone9s, iPad10, toroMower));
+        productRepository.saveAll(Arrays.asList(iphone8s, iphone9s, iPad10, toroMower));
 
         Cart cart = Cart
                 .builder()
@@ -136,7 +136,7 @@ public class DbController {
                 .cart(cartRepository.findByCartName("MyFirstCart"))
                 .product(productRepository.findBySkuNumber("TOROMOWER567"))
                 .build();
-        itemRepository.save(Arrays.asList(iPad10Item, toroMowerItem));
+        itemRepository.saveAll(Arrays.asList(iPad10Item, toroMowerItem));
 
         cart.setItems(Arrays.asList(iPad10Item, toroMowerItem));
         cartRepository.save(cart);
