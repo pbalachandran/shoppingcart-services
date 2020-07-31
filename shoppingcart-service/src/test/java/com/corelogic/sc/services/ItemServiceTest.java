@@ -23,8 +23,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
+import java.time.Clock;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -32,10 +37,12 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({MockitoExtension.class})
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class ItemServiceTest {
 
     private ItemService subject;
@@ -65,13 +72,24 @@ public class ItemServiceTest {
 
     private Item item1, item2;
 
+    @Mock
+    private Clock clock;
+
+    private final static LocalDate LOCAL_DATE = LocalDate.of(1989, 01, 13);
+
+    private Clock fixedClock;
+
     private LocalDateTime now;
 
     @BeforeEach
     public void setUp() throws Exception {
-        subject = new ItemService(mockItemRepository, mockCartRepository, mockProductRepository);
+        subject = new ItemService(clock, mockItemRepository, mockCartRepository, mockProductRepository);
 
-        now = LocalDateTime.now();
+        fixedClock = Clock.fixed(LOCAL_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+        doReturn(fixedClock.instant()).when(clock).instant();
+        doReturn(fixedClock.getZone()).when(clock).getZone();
+
+        now = LocalDateTime.now(fixedClock);
 
         savedCart = Cart
                 .builder()
@@ -197,7 +215,7 @@ public class ItemServiceTest {
                 .product(savedProduct1)
                 .quantity(2)
                 .status(ItemStatus.ITEM_ACTIVE.name())
-                .createdDate(any(LocalDateTime.class))
+                .createdDate(now)
                 .build());
 
         assertEquals(expected, actual);

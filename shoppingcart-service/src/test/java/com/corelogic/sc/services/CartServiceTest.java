@@ -170,9 +170,9 @@ public class CartServiceTest {
 
     @Test
     public void deleteCart_doesNotFindCartByThatCartName_throwsCartNotFoundException() {
-        doThrow(CartNotFoundException.class).when(mockCartRepository).deleteById("InvalidCart");
+        when(mockCartRepository.findByCartName("InvalidCart")).thenReturn(null);
 
         Assertions.assertThrows(CartNotFoundException.class, () ->
-                subject.findCart("InvalidCart"));
+                subject.deleteCart(DeleteCartRequest.builder().cartName("InvalidCart").build()));
     }
 }

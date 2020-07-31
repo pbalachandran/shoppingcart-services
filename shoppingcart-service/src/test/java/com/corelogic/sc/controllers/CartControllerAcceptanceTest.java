@@ -6,7 +6,7 @@ import com.corelogic.sc.requests.AddCartRequest;
 import com.corelogic.sc.requests.DeleteCartRequest;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
+
+import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,7 +45,7 @@ public class CartControllerAcceptanceTest {
     @Value("${db.utilities.url}")
     private String dbUtilitiesURL;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() throws Exception {
         restTemplate.exchange(dbUtilitiesURL + "/reseed",
                 HttpMethod.POST,

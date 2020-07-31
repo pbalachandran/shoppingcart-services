@@ -16,6 +16,7 @@ import com.corelogic.sc.respositories.ItemRepository;
 import com.corelogic.sc.respositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,13 +24,16 @@ import java.util.stream.Collectors;
 @Service
 public class ItemService {
 
+    private Clock clock;
+
     private ItemRepository itemRepository;
 
     private CartRepository cartRepository;
 
     private ProductRepository productRepository;
 
-    public ItemService(ItemRepository itemRepository, CartRepository cartRepository, ProductRepository productRepository) {
+    public ItemService(Clock clock, ItemRepository itemRepository, CartRepository cartRepository, ProductRepository productRepository) {
+        this.clock = clock;
         this.itemRepository = itemRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
@@ -59,7 +63,7 @@ public class ItemService {
                 .product(product)
                 .quantity(addItemRequest.getQuantity())
                 .status(ItemStatus.ITEM_ACTIVE.name())
-                .createdDate(LocalDateTime.now())
+                .createdDate(LocalDateTime.now(clock))
                 .build());
 
         return ItemResponse
