@@ -14,19 +14,23 @@ import com.corelogic.sc.responses.CartResponse;
 import com.corelogic.sc.responses.CartStatus;
 import com.corelogic.sc.responses.ItemResponse;
 import com.corelogic.sc.respositories.CartRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({MockitoExtension.class})
 public class CartServiceTest {
 
     @Mock
@@ -39,7 +43,7 @@ public class CartServiceTest {
 
     private LocalDateTime now = LocalDateTime.now();
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         subject = new CartService(mockCartRepository, mockItemService);
     }
@@ -68,11 +72,13 @@ public class CartServiceTest {
         assertEquals(expected, actual);
     }
 
-    @Test(expected = CartNotFoundException.class)
+    @Test
     public void findCart_doesNotFindCartByThatCartName_throwsCartNotFoundException() throws Exception {
         when(mockCartRepository.findByCartName("Cart101")).thenReturn(null);
 
-        subject.findCart("Cart101");
+        Assertions.assertThrows(CartNotFoundException.class, () ->
+                subject.findCart("Cart101"));
+
         verify(mockCartRepository).findByCartName("Cart101");
     }
 
@@ -103,13 +109,13 @@ public class CartServiceTest {
                 .build();
         when(mockCartRepository.findByCartName("MyFirstCart")).thenReturn(savedCart);
 
-        doNothing().when(mockCartRepository).delete("MyFirstCart");
+        doNothing().when(mockCartRepository).deleteById("MyFirstCart");
 
         subject.deleteCart(DeleteCartRequest
                 .builder()
                 .cartName("MyFirstCart")
                 .build());
-        verify(mockCartRepository).delete("MyFirstCart");
+        verify(mockCartRepository).deleteById("MyFirstCart");
     }
 
     @Test
@@ -147,7 +153,7 @@ public class CartServiceTest {
                 .build();
         when(mockItemService.removeItem(removeItemFromCartRequest)).thenReturn(ItemResponse.builder().build());
 
-        doNothing().when(mockCartRepository).delete("MyFirstCart");
+        doNothing().when(mockCartRepository).deleteById("MyFirstCart");
 
         subject.deleteCart(DeleteCartRequest
                 .builder()
@@ -162,10 +168,11 @@ public class CartServiceTest {
                 .build());
     }
 
-    @Test(expected = CartNotFoundException.class)
-    public void deleteCart_doesNotFindCartByThatCartName_throwsCartNotFoundException() throws Exception {
-        doThrow(CartNotFoundException.class).when(mockCartRepository).delete("InvalidCart");
+    @Test
+    public void deleteCart_doesNotFindCartByThatCartName_throwsCartNotFoundException() {
+        doThrow(CartNotFoundException.class).when(mockCartRepository).deleteById("InvalidCart");
 
-        subject.findCart("InvalidCart");
+        Assertions.assertThrows(CartNotFoundException.class, () ->
+                subject.findCart("InvalidCart"));
     }
 }

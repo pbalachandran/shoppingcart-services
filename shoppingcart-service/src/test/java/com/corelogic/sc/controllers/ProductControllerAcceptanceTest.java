@@ -1,12 +1,14 @@
 package com.corelogic.sc.controllers;
 
 import com.corelogic.sc.ShoppingCartServiceApplication;
+import com.corelogic.sc.configurations.ShoppingCartServicesConfiguration;
 import com.corelogic.sc.requests.AddProductRequest;
+import com.corelogic.sc.respositories.ItemRepository;
 import com.corelogic.sc.utils.TestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,7 +17,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,10 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@ContextConfiguration(classes = {ShoppingCartServiceApplication.class})
+@ContextConfiguration(classes = {ShoppingCartServiceApplication.class, ShoppingCartServicesConfiguration.class})
 public class ProductControllerAcceptanceTest {
 
     @Autowired
@@ -40,7 +42,7 @@ public class ProductControllerAcceptanceTest {
     @Value("${db.utilities.url}")
     private String dbUtilitiesURL;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         restTemplate.exchange(dbUtilitiesURL + "/reseed",
                 HttpMethod.POST,

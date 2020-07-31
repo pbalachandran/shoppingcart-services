@@ -7,11 +7,12 @@ import com.corelogic.sc.requests.AddProductRequest;
 import com.corelogic.sc.responses.ProductResponse;
 import com.corelogic.sc.respositories.ProductCategoryRepository;
 import com.corelogic.sc.respositories.ProductRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -19,11 +20,11 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({MockitoExtension.class})
 public class ProductServiceTest {
 
     @Mock
@@ -34,7 +35,7 @@ public class ProductServiceTest {
 
     private ProductService subject;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         subject = new ProductService(mockProductRepository, mockProductCategoryRepository);
     }
@@ -146,11 +147,12 @@ public class ProductServiceTest {
         assertEquals(expected, actual);
     }
 
-    @Test(expected = ProductNotFoundException.class)
-    public void getProductsBySkuNumber_whenProductNotFound_throwsProductNotFoundException() throws ProductNotFoundException {
+    @Test
+    public void getProductsBySkuNumber_whenProductNotFound_throwsProductNotFoundException() {
         when(mockProductRepository.findBySkuNumber("Invalid SKU#")).thenReturn(null);
 
-        subject.getProductBySkuNumber("Invalid SKU#");
+        Assertions.assertThrows(ProductNotFoundException.class, () ->
+                subject.getProductBySkuNumber("Invalid SKU#"));
 
         verify(mockProductRepository).findBySkuNumber("Invalid SKU#");
     }

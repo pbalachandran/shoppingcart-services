@@ -15,26 +15,27 @@ import com.corelogic.sc.responses.ItemStatus;
 import com.corelogic.sc.respositories.CartRepository;
 import com.corelogic.sc.respositories.ItemRepository;
 import com.corelogic.sc.respositories.ProductRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith({MockitoExtension.class})
 public class ItemServiceTest {
 
     private ItemService subject;
@@ -66,7 +67,7 @@ public class ItemServiceTest {
 
     private LocalDateTime now;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         subject = new ItemService(mockItemRepository, mockCartRepository, mockProductRepository);
 
@@ -217,15 +218,15 @@ public class ItemServiceTest {
         assertEquals(98, itemArgumentCaptor.getValue().getProduct().getInventoryCount().intValue());
     }
 
-    @Test(expected = InsufficientProductInventoryException.class)
-    public void addItem_onInsufficientProductInventory_throwsInsufficientProductInventoryException()
-            throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
+    @Test
+    public void addItem_onInsufficientProductInventory_throwsInsufficientProductInventoryException() {
+        Assertions.assertThrows(InsufficientProductInventoryException.class, () ->
         subject.addItem(AddItemRequest
                 .builder()
                 .cartName("MyFirstCart")
                 .skuNumber("22")
                 .quantity(102)
-                .build());
+                .build()));
     }
 
     @Test
@@ -342,7 +343,7 @@ public class ItemServiceTest {
                 .build();
         when(mockProductRepository.findBySkuNumber("22")).thenReturn(savedProductWithReducedInventory);
 
-        doNothing().when(mockItemRepository).delete(1L);
+        doNothing().when(mockItemRepository).deleteById(1L);
 
         Product savedProductOriginalQuantity = Product
                 .builder()
@@ -376,7 +377,7 @@ public class ItemServiceTest {
         verify(mockItemRepository).findByCartName("MyFirstCart");
         verify(mockCartRepository).findByCartName("MyFirstCart");
         verify(mockProductRepository).findBySkuNumber("22");
-        verify(mockItemRepository).delete(1L);
+        verify(mockItemRepository).deleteById(1L);
         verify(mockProductRepository).save(savedProductOriginalQuantity);
         assertEquals(expected, actual);
     }
@@ -448,38 +449,37 @@ public class ItemServiceTest {
         assertEquals(98, productArgumentCaptor.getValue().getInventoryCount().intValue());
     }
 
-    @Test(expected = ItemNotFoundException.class)
-    public void removeItem_whenItemIsNotFound_throwsItemNotFoundException()
-            throws CartNotFoundException, ProductNotFoundException, ItemNotFoundException {
-
+    @Test
+    public void removeItem_whenItemIsNotFound_throwsItemNotFoundException() {
+        Assertions.assertThrows(ItemNotFoundException.class, () ->
         subject.removeItem(RemoveItemFromCartRequest
                 .builder()
                 .skuNumber("InvalidItemSKU")
                 .quantity(1)
                 .cartName("MyFirstCart")
-                .build());
+                .build()));
     }
 
-    @Test(expected = CartNotFoundException.class)
-    public void addItem_findByCartNameWithInvalidCartName_throwsCartNotFoundException()
-            throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
+    @Test
+    public void addItem_findByCartNameWithInvalidCartName_throwsCartNotFoundException() {
+        Assertions.assertThrows(CartNotFoundException.class, () ->
         subject.addItem(AddItemRequest
                 .builder()
                 .cartName("InvalidCart")
                 .skuNumber("22")
                 .quantity(2)
-                .build());
+                .build()));
     }
 
-    @Test(expected = ProductNotFoundException.class)
-    public void addItem_findByProductWithInvalidSkuNumber_throwsProductNotFoundException()
-            throws CartNotFoundException, ProductNotFoundException, InsufficientProductInventoryException {
+    @Test
+    public void addItem_findByProductWithInvalidSkuNumber_throwsProductNotFoundException() {
+        Assertions.assertThrows(ProductNotFoundException.class, () ->
         subject.addItem(AddItemRequest
                 .builder()
                 .cartName("MyFirstCart")
                 .skuNumber("InvalidSKU")
                 .quantity(2)
-                .build());
+                .build()));
     }
 
     @Test
@@ -512,8 +512,9 @@ public class ItemServiceTest {
         assertEquals(expected, actual);
     }
 
-    @Test(expected = CartNotFoundException.class)
-    public void retrieveItems_findByCartNameWithInvalidCartName_throwsCartNotFoundException() throws CartNotFoundException {
-        subject.retrieveItems("InvalidCart");
+    @Test
+    public void retrieveItems_findByCartNameWithInvalidCartName_throwsCartNotFoundException() {
+        Assertions.assertThrows(CartNotFoundException.class, () ->
+        subject.retrieveItems("InvalidCart"));
     }
 }

@@ -20,20 +20,36 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa') {
+        exclude group: 'org.dom4j:dom4j'
+    }
+
+    implementation('org.springframework.boot:spring-boot-starter-web')
+
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.postgresql:postgresql'
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
     implementation 'commons-io:commons-io:2.6'
 
-    compileOnly 'org.projectlombok:lombok:1.18.12'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
+    implementation 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.12'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+    // Test
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
+    testImplementation('org.junit.jupiter:junit-jupiter-params')
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation 'org.mockito:mockito-core:3.+'
+    testImplementation('org.mockito:mockito-junit-jupiter')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
