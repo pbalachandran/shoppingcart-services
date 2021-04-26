@@ -25,12 +25,12 @@ Underlying DB that backs above projects
 
 ### DB/Schema/User Details
 * DB: <i>shoppingcart</i>
-* Schema: <i>sc</i>
-* User: <i>sc</i>
+* Schema: <i>shoppingcart</i>
+* User: <i>shoppingcart-user</i>
 
 ### DB Commands
 * command-line# createdb shoppingcart
-* command-line# createuser sc
-* postgres=# alter role sc superuser;
-* postgres=# create schema sc;
-* postgres=# ALTER USER sc WITH PASSWORD 'password';
+* command-line# createuser shoppingcart_user
+* postgres=# alter role shoppingcart_user superuser;
+* postgres=# create schema shoppingcart;
+* postgres=# ALTER USER shoppingcart_user WITH PASSWORD 'password';
