@@ -15,7 +15,6 @@ apply plugin: 'org.springframework.boot'
 
 repositories {
     mavenCentral()
-    maven { url "https://repo.corelogic.net/nexus/content/groups/m2/" }
 }
 
 dependencies {
